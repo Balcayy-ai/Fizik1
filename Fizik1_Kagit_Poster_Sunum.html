@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fizik 1 (FZM 105) - Kâğıt Poster Sunumu</title>
+  <!-- Google Fonts: Oswald (bold condensed), Space Mono, Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- KaTeX for crisp math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <style>
+    :root {
+      --c-cream: #F3F0E6;
+      --c-dark:  #111410;
+      --c-olive: #68725F;
+      --c-lime:  #D5FA73;
+      --c-card-bg: #EAE6D9;
+      --c-border: #111410;
+      --font-display: 'Oswald', -apple-system, sans-serif;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-mono: 'Space Mono', Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0d0f0c;
+      color: var(--c-dark);
+      font-family: var(--font-mono);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Paper grain SVG background */
+    .paper-texture {
+      background-color: var(--c-cream);
+      background-image: radial-gradient(rgba(17, 20, 16, 0.08) 1px, transparent 0);
+      background-size: 8px 8px;
+    }
+
+    /* Progress Bar (Placed cleanly right above the bottom nav controls) */
+    #progress-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(17, 20, 16, 0.2);
+      position: fixed;
+      bottom: 65px;
+      left: 0;
+      z-index: 100;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--c-lime);
+      transition: width 0.3s ease-out;
+    }
+
+    /* Main Container */
+    #presentation-container {
+      flex: 1;
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 65px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* Poster Slide Card */
+    .slide {
+      position: absolute;
+      width: min(94vw, 1300px);
+      height: min(88vh, 840px);
+      background: var(--c-cream);
+      border: 4px solid var(--c-dark);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+      padding: 2.5rem 3rem 1.8rem 3rem;
+      display: none;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    /* Custom slim scrollbar */
+    .slide::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide::-webkit-scrollbar-track {
+      background: rgba(17, 20, 16, 0.05);
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: var(--c-olive);
+      border-radius: 3px;
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      z-index: 10;
+    }
+
+    /* Washi Tape Header - Folded cleanly over top border */
+    .slide-tape {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--c-lime);
+      color: var(--c-dark);
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 3px 26px 4px 26px;
+      border: 2px solid var(--c-dark);
+      border-top: none;
+      box-shadow: 0 3px 6px rgba(17, 20, 16, 0.15);
+      z-index: 25;
+      pointer-events: none;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 3px solid var(--c-dark);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+    .slide-section-tag {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--c-olive);
+      text-transform: uppercase;
+    }
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: 2.3rem;
+      font-weight: 900;
+      color: var(--c-dark);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      margin-top: 0.2rem;
+    }
+    .slide-subtitle {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--c-olive);
+      font-style: italic;
+      margin-top: 0.25rem;
+    }
+
+    /* Slide Body & Grids */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    /* Poster Ink Cards */
+    .card {
+      background: var(--c-card-bg);
+      border: 2px solid var(--c-dark);
+      padding: 1.25rem;
+      position: relative;
+    }
+    .card.dark {
+      background: var(--c-dark);
+      color: var(--c-cream);
+      border-color: var(--c-dark);
+    }
+    .card.dark .card-title {
+      color: var(--c-lime);
+    }
+    .card.dark p, .card.dark li {
+      color: #D2D8CF;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: var(--c-dark);
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 2px solid currentColor;
+      padding-bottom: 0.3rem;
+    }
+
+    /* Stamped Formula Boxes */
+    .formula-stamp {
+      background: var(--c-dark);
+      color: var(--c-lime);
+      border: 2px solid var(--c-dark);
+      padding: 0.85rem 1.25rem;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0.65rem 0;
+    }
+    .formula-stamp.lime-bg {
+      background: var(--c-lime);
+      color: var(--c-dark);
+    }
+
+    /* Poster Tables */
+    table.poster-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid var(--c-dark);
+      font-size: 0.92rem;
+    }
+    table.poster-table th, table.poster-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border: 1px solid var(--c-dark);
+    }
+    table.poster-table th {
+      background: var(--c-dark);
+      color: var(--c-cream);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+    table.poster-table tr:nth-child(even) {
+      background: rgba(17, 20, 16, 0.04);
+    }
+
+    /* Clean Bullet Lists */
+    ul.poster-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    ul.poster-list li {
+      position: relative;
+      padding-left: 1.3rem;
+      margin-bottom: 0.55rem;
+    }
+    ul.poster-list li::before {
+      content: "■";
+      color: var(--c-olive);
+      font-size: 0.75rem;
+      position: absolute;
+      left: 0;
+      top: 0.2rem;
+    }
+    .card.dark ul.poster-list li::before {
+      color: var(--c-lime);
+    }
+
+    /* Step Numbers */
+    .step-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+    .step-badge {
+      background: var(--c-dark);
+      color: var(--c-lime);
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Title Slide Specifics */
+    .slide.title-slide {
+      background: var(--c-dark);
+      color: var(--c-cream);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-color: var(--c-lime);
+    }
+    .title-slide h1 {
+      font-family: var(--font-display);
+      font-size: 4.6rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: var(--c-lime);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+    .title-slide h2 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--c-cream);
+      margin-bottom: 2rem;
+    }
+    .title-meta-box {
+      display: flex;
+      gap: 2.5rem;
+      border-top: 2px solid var(--c-olive);
+      border-bottom: 2px solid var(--c-olive);
+      padding: 1.25rem 2rem;
+      color: #A7B0A4;
+      font-size: 1rem;
+    }
+
+    /* Bottom Nav Bar */
+    #nav-controls {
+      height: 65px;
+      background: var(--c-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      border-top: 3px solid var(--c-olive);
+      z-index: 50;
+    }
+    .nav-btn {
+      background: var(--c-lime);
+      color: var(--c-dark);
+      border: 2px solid var(--c-dark);
+      padding: 0.45rem 1.1rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover {
+      background: #e4ff8f;
+    }
+    .nav-btn.secondary {
+      background: transparent;
+      color: var(--c-cream);
+      border-color: var(--c-olive);
+    }
+    .nav-btn.secondary:hover {
+      background: var(--c-olive);
+    }
+    #slide-counter {
+      color: var(--c-lime);
+      font-size: 1.15rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    /* Print / PDF Mode */
+    @media print {
+      body {
+        background: white !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #progress-container, #nav-controls {
+        display: none !important;
+      }
+      #presentation-container {
+        display: block !important;
+        height: auto !important;
+        padding: 0 !important;
+      }
+      .slide {
+        display: flex !important;
+        opacity: 1 !important;
+        transform: none !important;
+        position: relative !important;
+        width: 100% !important;
+        height: 100vh !important;
+        page-break-after: always;
+        box-shadow: none !important;
+        border: 2px solid black !important;
+        padding: 2cm !important;
+      }
+    }
+  </style>
+</head>
+<body class="paper-texture">
+
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <div id="presentation-container">
+
+    <!-- SLIDE 1: Kapak -->
+    <div class="slide title-slide active" data-title="Kapak: Fizik 1 Kâğıt Poster">
+      <div class="slide-tape">DERS NOTLARI & ÇALIŞMA REHBERİ</div>
+      <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.65rem; color: var(--c-lime); margin-bottom: 0.6rem; letter-spacing: 0.05em; font-weight: 400;">~ Berk'ten Sevgilerle ~</p>
+      <p style="font-family:var(--font-mono); color:var(--c-olive); letter-spacing:0.2em; margin-bottom:1rem; font-weight:700;">// FZM 105 ÇALIŞMA POSTERİ</p>
+      <h1>FİZİK 1: MEKANİK</h1>
+      <h2>Tek Boyutta Doğrusal Hareket ve Vektörler</h2>
+      <div class="title-meta-box">
+        <div><strong>KAPSAM:</strong> Fizik & Ölçüm, Kinematik, Vektör Cebiri</div>
+        <div><strong>FORMAT:</strong> Kâğıt Poster Stüdyo Tasarımı</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: İçindekiler -->
+    <div class="slide" data-title="İçindekiler ve Plan">
+      <div class="slide-tape">SUNUM PLANI</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">00 // GENEL BAKIŞ</div>
+          <h2 class="slide-title">KONU MİMARİSİ VE ÇALIŞMA HARİTASI</h2>
+          <div class="slide-subtitle">Tüm teori, boyut analizi türetimleri, kinematik ve vektör cebiri</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">01 // FİZİK VE ÖLÇÜM</div>
+            <ul class="poster-list">
+              <li>Temel SI Büyüklükleri ($m, kg, s$) & Türetilmiş Birimler</li>
+              <li>Boyut Analizi Prensibi ve Üs Eşitleme Metodu</li>
+              <li>Örnek 1: Dairesel Harekette İvme Türetimi ($a = v^2/r$)</li>
+              <li>Örnek 2: Basit Sarkaç Periyodu (Kütleden Bağımsızlık)</li>
+              <li>Örnek 3: Kepler 3. Yasası ve Dolanma Periyodu (Ödev S3)</li>
+              <li>Birim Dönüşümleri & Anlamlı Rakam Kuralları</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">02 // TEK BOYUTTA DOĞRUSAL HAREKET</div>
+            <ul class="poster-list">
+              <li>Konum ($x$), Yer Değiştirme ($\Delta x$) ve Alınan Yol</li>
+              <li>Ortalama Hız, Ortalama Sürat & Anlık Hız ($v = dx/dt$)</li>
+              <li>Ortalama & Anlık İvme ($a = dv/dt = d^2x/dt^2$)</li>
+              <li>Hızlanma / Yavaşlama Kriterleri ve İşaret Matrisi</li>
+              <li>4 Temel Kinematik Denklem & Serbest Düşme</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">03 // DERS İÇİ PROBLEMLER</div>
+            <ul class="poster-list">
+              <li>Örnek 1: Çıta ve Ceylan ($x = 20 + 5t^2$ Türev Analizi)</li>
+              <li>Örnek 2: Araba Frenleme Mesafesi ve Süresi</li>
+              <li>Örnek 3: Polis Kovalama (Yakalama & Maksimum Mesafe)</li>
+            </ul>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">04 // VEKTÖRLER VE ÖZET TABLOLAR</div>
+            <ul class="poster-list">
+              <li>Skaler vs Vektörel Ayrımı & Geometrik Özellikler</li>
+              <li>Kartezyen Dik Bileşenler ve 4 Bölge Açı Kontrolü</li>
+              <li>Birim Vektörler ($\hat{i}, \hat{j}, \hat{k}$) & Analitik Toplama</li>
+              <li>Büyük Formül Özeti ve Sınav Başarı Stratejisi</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Temel Büyüklükler & SI -->
+    <div class="slide" data-title="Bölüm 1: Temel Büyüklükler ve SI">
+      <div class="slide-tape">BÖLÜM 01</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">01 // FİZİK VE ÖLÇÜM</div>
+          <h2 class="slide-title">TEMEL BÜYÜKLÜKLER VE SI BİRİM SİSTEMİ</h2>
+          <div class="slide-subtitle">Deney ve gözlemlerin matematiksel modellerle teoriye dönüştürülmesi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card dark">
+            <div class="card-title">UZUNLUK (LENGTH)</div>
+            <p>Sembol: <strong>$[L]$</strong></p>
+            <p>SI Birimi: <strong>Metre ($m$)</strong></p>
+            <div class="formula-stamp" style="font-size:0.95rem; margin-top:1rem;">1m = Işığın 1/299792458 s'de aldığı yol</div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">KÜTLE (MASS)</div>
+            <p>Sembol: <strong>$[M]$</strong></p>
+            <p>SI Birimi: <strong>Kilogram ($kg$)</strong></p>
+            <div class="formula-stamp" style="font-size:0.95rem; margin-top:1rem;">Planck sabiti (h) temelinde tanımlıdır</div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">ZAMAN (TIME)</div>
+            <p>Sembol: <strong>$[T]$</strong></p>
+            <p>SI Birimi: <strong>Saniye ($s$)</strong></p>
+            <div class="formula-stamp" style="font-size:0.95rem; margin-top:1rem;">Sezyum-133 atomik ışıma periyodu</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:0.5rem;">
+          <div class="card-title">TÜRETİLMİŞ BÜYÜKLÜKLERİN BOYUTLARI</div>
+          <table class="poster-table">
+            <thead>
+              <tr>
+                <th>Büyüklük</th>
+                <th>Tanım Bağıntısı</th>
+                <th>Boyut Analizi</th>
+                <th>SI Birimi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Yoğunluk ($\rho$)</strong></td>
+                <td>$\rho = m / V$</td>
+                <td>$[\rho] = [M] / [L]^3 = [M][L]^{-3}$</td>
+                <td>$\text{kg/m}^3$</td>
+              </tr>
+              <tr>
+                <td><strong>Hız ($v$)</strong></td>
+                <td>$v = \Delta x / \Delta t$</td>
+                <td>$[v] = [L] / [T] = [L][T]^{-1}$</td>
+                <td>$\text{m/s}$</td>
+              </tr>
+              <tr>
+                <td><strong>İvme ($a$)</strong></td>
+                <td>$a = \Delta v / \Delta t$</td>
+                <td>$[a] = [L] / [T]^2 = [L][T]^{-2}$</td>
+                <td>$\text{m/s}^2$</td>
+              </tr>
+              <tr>
+                <td><strong>Alan ($A$)</strong></td>
+                <td>$A = \text{en} \times \text{boy}$</td>
+                <td>$[A] = [L]^2$</td>
+                <td>$\text{m}^2$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Boyut Analizi Yöntemi -->
+    <div class="slide" data-title="Boyut Analizi Yöntemi">
+      <div class="slide-tape">BOYUT ANALİZİ</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">01.2 // FORMÜL TÜRETME</div>
+          <h2 class="slide-title">BOYUT ANALİZİ YÖNTEMİ VE ÜS EŞİTLEME</h2>
+          <div class="slide-subtitle">Denklem tutarlılığı kontrolü ve bilinmeyen formül bağıntılarının türetilmesi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">TEMEL İLKELER</div>
+            <ul class="poster-list">
+              <li><strong>Boyut Tutarlılığı:</strong> Bir fizik denkleminde eşitliğin her iki yanındaki ve toplanan/çıkarılan her terimin boyutu aynı olmalıdır.</li>
+              <li><strong>Boyutsuz Katsayılar:</strong> Saf sayılar ($\pi, 1/2$), açılar ve trigonometrik fonksiyonların boyutu $[1]$ kabul edilir.</li>
+            </ul>
+            <div class="formula-stamp lime-bg" style="margin-top:1.5rem;">
+              $[\text{Sol Taraf}] = [\text{Sağ Taraf}]$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">ADIM ADIM TÜRETİM STRATEJİSİ</div>
+            <div class="step-box">
+              <div class="step-badge">1</div>
+              <div>Aranan niceliği boyutsuz $k$ sabiti ve değişkenlerin üsleri ile modelleyin: $y = k \cdot x_1^a \cdot x_2^b \dots$</div>
+            </div>
+            <div class="step-box">
+              <div class="step-badge">2</div>
+              <div>Büyüklükler yerine temel boyutları ($[M], [L], [T]$) yerleştirin.</div>
+            </div>
+            <div class="step-box">
+              <div class="step-badge">3</div>
+              <div>Tabanları aynı olan boyutların üslerini cebirsel olarak toplayın.</div>
+            </div>
+            <div class="step-box">
+              <div class="step-badge">4</div>
+              <div>Eşitliğin iki tarafındaki $[M], [L], [T]$ üslerini birbirine eşitleyerek denklem sistemini çözün.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Boyut Analizi Örnek 1 -->
+    <div class="slide" data-title="Örnek 1: Dairesel İvme Türetimi">
+      <div class="slide-tape">ÖRNEK 01</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">BOYUT ANALİZİ ÇÖZÜMLÜ PROBLEM</div>
+          <h2 class="slide-title">DAİRESEL HAREKETTE İVME İFADESİ TÜRETİMİ</h2>
+          <div class="slide-subtitle">İvmenin ($a$), yörünge yarıçapı ($r$) ve çizgisel hız ($v$) ile ilişkisi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">1. MODEL VE BOYUTLAR</div>
+            <p>Model denklem: $$a = k \cdot r^n \cdot v^m$$</p>
+            <p>Boyutların yazılması:</p>
+            <p>$$[a] = \frac{[L]}{[T]^2} = [L]^1 [T]^{-2}$$</p>
+            <p>$$[r] = [L], \quad [v] = \frac{[L]}{[T]} = [L][T]^{-1}$$</p>
+            <p>Eşitlik:</p>
+            <p>$$[L]^1 [T]^{-2} = [L]^n \cdot ([L][T]^{-1})^m = [L]^{n+m} [T]^{-m}$$</p>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">2. ÜS EŞİTLEMESİ VE SONUÇ</div>
+            <ul class="poster-list">
+              <li><strong>Zaman $[T]$ üsleri:</strong> $$-2 = -m \implies \mathbf{m = 2}$$</li>
+              <li><strong>Uzunluk $[L]$ üsleri:</strong> $$1 = n + m \implies 1 = n + 2 \implies \mathbf{n = -1}$$</li>
+            </ul>
+            <div class="formula-stamp lime-bg" style="font-size:1.6rem; margin-top:1.5rem;">
+              $$a = k \cdot r^{-1} \cdot v^2 = \frac{v^2}{r}$$
+            </div>
+            <p style="text-align:center; color:#A7B0A4; font-size:0.9rem; margin-top:0.5rem;">$k=1$ için klasik Merkezcil İvme formülü elde edilir.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Boyut Analizi Örnek 2 & 3 -->
+    <div class="slide" data-title="Örnek 2 & 3: Sarkaç ve Kepler">
+      <div class="slide-tape">ÖRNEK 02 & 03</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">BOYUT ANALİZİ İLERİ TÜRETİMLER</div>
+          <h2 class="slide-title">BASİT SARKAÇ VE KEPLER’İN 3. YASASI (ÖDEV S3)</h2>
+          <div class="slide-subtitle">Kütleden bağımsızlık ispatı ve gravitasyonel dolanma periyodu</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">BASİT SARKAÇ PERİYODU</div>
+            <p>Model: $T = c \cdot m^x \cdot l^y \cdot g^z$</p>
+            <p>$$[T]^1 = [M]^x \cdot [L]^y \cdot ([L][T]^{-2})^z = [M]^x [L]^{y+z} [T]^{-2z}$$</p>
+            <ul class="poster-list" style="margin-top:0.5rem;">
+              <li>$[M]$ için: $\mathbf{x = 0}$ &rarr; <span style="font-weight:700; color:var(--c-dark);">Kütleye bağlı DEĞİLDİR!</span></li>
+              <li>$[T]$ için: $1 = -2z \implies \mathbf{z = -1/2}$</li>
+              <li>$[L]$ için: $y + z = 0 \implies \mathbf{y = 1/2}$</li>
+            </ul>
+            <div class="formula-stamp" style="font-size:1.3rem;">
+              $$T = c \sqrt{\frac{l}{g}} \quad (c = 2\pi)$$
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">KEPLER’İN 3. YASASI (ÖDEV S3)</div>
+            <p>$G$ sabiti boyutu: $[G] = [L]^3 [M]^{-1} [T]^{-2}$</p>
+            <p>Model: $T = C \cdot r^\alpha \cdot G^\beta \cdot M^\gamma$</p>
+            <p>$$[T]^1 = [L]^{\alpha+3\beta} [M]^{-\beta+\gamma} [T]^{-2\beta}$$</p>
+            <ul class="poster-list" style="margin-top:0.5rem;">
+              <li>$[T]$: $-2\beta = 1 \implies \mathbf{\beta = -1/2}$</li>
+              <li>$[M]$: $-\beta + \gamma = 0 \implies \mathbf{\gamma = -1/2}$</li>
+              <li>$[L]$: $\alpha + 3\beta = 0 \implies \mathbf{\alpha = 3/2}$</li>
+            </ul>
+            <div class="formula-stamp lime-bg" style="font-size:1.3rem;">
+              $$T^2 = C' \frac{r^3}{GM}$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Birim Dönüşümleri -->
+    <div class="slide" data-title="Birim Dönüşümleri">
+      <div class="slide-tape">BİRİM DÖNÜŞÜMLERİ</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">01.3 // HASSAS HESAPLAMA</div>
+          <h2 class="slide-title">BİRİM DÖNÜŞÜM ÇARPANLARI VE HIZ ÖRNEKLERİ</h2>
+          <div class="slide-subtitle">İngiliz-Amerikan birimlerinden SI sistemine kesin dönüşüm</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">DÖNÜŞÜM ORANLARI</div>
+            <table class="poster-table" style="background:#1a1e19;">
+              <tbody>
+                <tr><td><strong>1 mil (mile)</strong></td><td>$= 1609 \text{ m} = 1.609 \text{ km}$</td></tr>
+                <tr><td><strong>1 metre (m)</strong></td><td>$= 39.37 \text{ in.} = 3.281 \text{ ft}$</td></tr>
+                <tr><td><strong>1 fit (ft)</strong></td><td>$= 0.3048 \text{ m} = 30.48 \text{ cm}$</td></tr>
+                <tr><td><strong>1 inç (in.)</strong></td><td>$= 0.0254 \text{ m} = 2.54 \text{ cm}$</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-title">ÇÖZÜMLÜ HIZ DÖNÜŞÜMLERİ</div>
+            <div style="margin-bottom:1rem;">
+              <strong>1. $90 \text{ m/s}$ Hızının Dönüşümü:</strong>
+              <div class="formula-stamp" style="font-size:1.05rem;">
+                $$90 \frac{\text{m}}{\text{s}} \times \frac{3600\text{ s}}{1000\text{ m}} = \mathbf{324 \text{ km/h}}$$
+              </div>
+              <div class="formula-stamp" style="font-size:1.05rem;">
+                $$324 \frac{\text{km}}{\text{h}} \times \frac{1\text{ mil}}{1.609\text{ km}} \approx \mathbf{201.37 \text{ mph}}$$
+              </div>
+            </div>
+            <div>
+              <strong>2. Kara Hız Rekoru ($763.0 \text{ mi/h}$):</strong>
+              <div class="formula-stamp lime-bg" style="font-size:1.05rem;">
+                $$763.0 \frac{\text{mil}}{\text{h}} = \mathbf{341.0 \text{ m/s}} = \mathbf{0.341 \text{ km/s}}$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Anlamlı Rakamlar -->
+    <div class="slide" data-title="Anlamlı Rakamlar">
+      <div class="slide-tape">HASSASİYET</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">01.4 // BELİRSİZLİK & DOĞRULUK</div>
+          <h2 class="slide-title">ANLAMLI RAKAMLAR (SIGNIFICANT FIGURES)</h2>
+          <div class="slide-subtitle">Ölçüm hassasiyetinin matematiksel kurallara göre yuvarlanması</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">1. ÇARPMA VE BÖLME KURALI</div>
+            <p>Sonuçtaki anlamlı basamak sayısı, işleme giren sayılar arasındaki <strong>en az anlamlı rakam sayısına</strong> sahip olanınki kadar olmalıdır.</p>
+            
+            <div class="card" style="margin-top:0.75rem; background:#1e241c;">
+              <p><strong>Örnek A:</strong> $0.741 \text{ (3 anlamlı)} \times 2.2 \text{ (2 anlamlı)} = 1.6302$</p>
+              <div class="formula-stamp lime-bg" style="font-size:1.1rem; margin:0.4rem 0;">Sonuç = 1.6</div>
+            </div>
+
+            <div class="card" style="margin-top:0.75rem; background:#1e241c;">
+              <p><strong>Örnek B:</strong> $(1.3578 \times 10^{-3}) \times (4.11 \times 10^7) = 5.580558 \times 10^4$</p>
+              <div class="formula-stamp lime-bg" style="font-size:1.1rem; margin:0.4rem 0;">Sonuç = 5.58 × 10⁴</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">2. TOPLAMA VE ÇIKARMA KURALI</div>
+            <p>Sonuçtaki ondalık basamak sayısı, işleme giren sayılar arasındaki <strong>virgülden sonra en az basamağa sahip olanla</strong> aynı olmalıdır.</p>
+            
+            <div class="card dark" style="margin-top:0.75rem;">
+              <p><strong>Örnek C:</strong></p>
+              <p>$$27.153 \text{ (3 hane)} + 138.2 \text{ (1 hane)} - 11.74 \text{ (2 hane)}$$</p>
+              <p>Hesap Makinesi Değeri: $153.613$</p>
+              <p>En az basamak $138.2$'de (virgülden sonra 1 basamak):</p>
+              <div class="formula-stamp lime-bg" style="font-size:1.1rem; margin:0.4rem 0;">Nihai Sonuç = 153.6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Bölüm 2 - Konum, Yer Değiştirme, Alınan Yol -->
+    <div class="slide" data-title="Bölüm 2: Konum ve Yer Değiştirme">
+      <div class="slide-tape">BÖLÜM 02</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">02 // KİNEMATİK</div>
+          <h2 class="slide-title">KONUM, YER DEĞİŞTİRME VE ALINAN YOL</h2>
+          <div class="slide-subtitle">Kuvvetler dikkate alınmaksızın bir hat üzerindeki ötelenme hareketi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <table class="poster-table">
+          <thead>
+            <tr>
+              <th>Büyüklük</th>
+              <th>Fiziksel Tanım</th>
+              <th>Türü</th>
+              <th>İşaret & Özellik</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Konum ($x$)</strong></td>
+              <td>Seçilen bir orijine göre uzaydaki yeri.</td>
+              <td><span style="background:var(--c-dark); color:var(--c-lime); padding:2px 8px; font-weight:700;">VEKTÖREL</span></td>
+              <td>Pozitif ($+$) veya Negatif ($-$) olabilir.</td>
+            </tr>
+            <tr>
+              <td><strong>Yer Değiştirme ($\Delta x$)</strong></td>
+              <td>Son konum ile ilk konum arasındaki yönlü fark: $\Delta x = x_s - x_i$</td>
+              <td><span style="background:var(--c-dark); color:var(--c-lime); padding:2px 8px; font-weight:700;">VEKTÖREL</span></td>
+              <td>Yön belirtir; pozitif, negatif veya sıfır olabilir.</td>
+            </tr>
+            <tr>
+              <td><strong>Alınan Yol</strong></td>
+              <td>Katledilen yörüngenin toplam skaler uzunluğudur.</td>
+              <td><span style="background:var(--c-card-bg); border:1px solid var(--c-dark); padding:2px 8px; font-weight:700;">SKALER</span></td>
+              <td>Daima pozitiftir ($yol \ge 0$). $|\Delta x| \le \text{Alınan Yol}$.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="card dark" style="margin-top:0.75rem;">
+          <div class="card-title">KRİTİK FİZİKSEL AYRIM</div>
+          <p>Başlangıç noktasına geri dönen bir cisim için son konum ilk konuma eşit olduğundan <strong>$\Delta x = 0$</strong>'dır; fakat cismin yolda harcadığı enerji ve <strong>Alınan Yol sıfırdan büyüktür</strong>!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Hız ve Sürat -->
+    <div class="slide" data-title="Hız ve Sürat Analizi">
+      <div class="slide-tape">HIZ & SÜRAT</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">02.2 // HAREKET HIZI</div>
+          <h2 class="slide-title">ORTALAMA HIZ, ORTALAMA SÜRAT VE ANLIK HIZ</h2>
+          <div class="slide-subtitle">Türevsel tanım ve konum-zaman (x-t) grafiğinde teğetin eğimi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">ORTALAMA BÜYÜKLÜKLER</div>
+            <p><strong>Ortalama Hız ($v_{ort}$):</strong> Vektörel büyüklüktür:</p>
+            <div class="formula-stamp" style="font-size:1.15rem;">
+              $$v_{ort} = \frac{\Delta x}{\Delta t} = \frac{x_s - x_i}{t_s - t_i}$$
+            </div>
+            <p style="margin-top:0.75rem;"><strong>Ortalama Sürat:</strong> Skalerdir:</p>
+            <div class="formula-stamp" style="font-size:1.1rem; background:#333c2e; color:white;">
+              $$\text{Ortalama Sürat} = \frac{\text{Toplam Yol}}{\text{Toplam Süre}}$$
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">ANLIK HIZ (dx/dt)</div>
+            <p>$\Delta t \to 0$ iken ortalama hızın limit değeridir. <strong>Konumun zamana göre 1. türevidir:</strong></p>
+            <div class="formula-stamp lime-bg" style="font-size:1.4rem;">
+              $$v = \lim_{\Delta t \to 0} \frac{\Delta x}{\Delta t} = \frac{dx}{dt}$$
+            </div>
+            <div class="card" style="background:#1a1e19; border-color:var(--c-lime); margin-top:0.75rem;">
+              <strong style="color:var(--c-lime);">GRAFİKSEL ANLAM:</strong> $x-t$ grafiğinde herhangi bir andaki noktaya çizilen <strong>teğetin eğimi</strong> doğrudan anlık hızı verir!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: İvme -->
+    <div class="slide" data-title="İvme ve Grafikler">
+      <div class="slide-tape">İVME</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">02.3 // HIZ DEĞİŞİMİ</div>
+          <h2 class="slide-title">İVME: ORTALAMA, ANLIK VE GRAFİKSEL YORUM</h2>
+          <div class="slide-subtitle">Hız-zaman (v-t) grafiğinde teğetin eğimi ve eğri altındaki alan</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">TANIM VE TÜREVSEL BAĞINTI</div>
+            <p><strong>Ortalama İvme ($a_{ort}$):</strong></p>
+            <div class="formula-stamp" style="font-size:1.15rem;">
+              $$a_{ort} = \frac{\Delta v}{\Delta t} = \frac{v_s - v_i}{t_s - t_i}$$
+            </div>
+            <p style="margin-top:0.75rem;"><strong>Anlık İvme ($a$):</strong></p>
+            <div class="formula-stamp lime-bg" style="font-size:1.3rem;">
+              $$a = \frac{dv}{dt} = \frac{d^2x}{dt^2}$$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">HIZ-ZAMAN (v-t) GRAFİK ANALİZİ</div>
+            <div style="margin-bottom:1rem;">
+              <strong>1. Teğetin Eğimi = İvme ($a$)</strong>
+              <p>Yukarı eğimli grafik hızlanan, aşağı eğimli grafik frenleyen ivmeyi gösterir.</p>
+            </div>
+            <div>
+              <strong>2. Grafiğin Altındaki Alan = Yer Değiştirme ($\Delta x$)</strong>
+              <div class="formula-stamp" style="font-size:1.1rem;">
+                $$\Delta x = \int v \, dt = \text{Eğri Altındaki Alan}$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: Hız ve İvmenin İşaret İlişkisi -->
+    <div class="slide" data-title="Hız ve İvmenin İşaretleri">
+      <div class="slide-tape">ALTIN KURAL</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">KRİTİK KONSEPT</div>
+          <h2 class="slide-title">HIZ VE İVMENİN İŞARET İLİŞKİSİ (HIZLANMA & YAVAŞLAMA)</h2>
+          <div class="slide-subtitle">İvmenin tek başına işareti hızlanma ya da yavaşlamayı belirlemez!</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <table class="poster-table">
+          <thead>
+            <tr>
+              <th>Hız ($v$)</th>
+              <th>İvme ($a$)</th>
+              <th>Hareket Durumu</th>
+              <th>Fiziksel Dinamik</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#0f5132;">Pozitif ($v > 0$)</strong></td>
+              <td><strong style="color:#0f5132;">Pozitif ($a > 0$)</strong></td>
+              <td><strong>Pozitif yönde HIZLANAN</strong></td>
+              <td>İvme ve hız aynı yönlüdür; sürat artar.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#0f5132;">Pozitif ($v > 0$)</strong></td>
+              <td><strong style="color:#842029;">Negatif ($a < 0$)</strong></td>
+              <td><strong>Pozitif yönde YAVAŞLAYAN</strong></td>
+              <td>İvme hıza zıt yönlüdür; araç fren yapar.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#842029;">Negatif ($v < 0$)</strong></td>
+              <td><strong style="color:#0f5132;">Pozitif ($a > 0$)</strong></td>
+              <td><strong>Negatif yönde YAVAŞLAYAN</strong></td>
+              <td>İvme ters yöne çeker; negatif sürat azalır.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#842029;">Negatif ($v < 0$)</strong></td>
+              <td><strong style="color:#842029;">Negatif ($a < 0$)</strong></td>
+              <td><strong>Negatif yönde HIZLANAN</strong></td>
+              <td>İkisi de negatif yöndedir; negatif sürat artar.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="formula-stamp lime-bg" style="font-size:1.4rem; margin-top:0.85rem;">
+          AYNI İŞARET = HIZLANIR &nbsp;|&nbsp; ZIT İŞARET = YAVAŞLAR
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: 4 Temel Kinematik Denklem -->
+    <div class="slide" data-title="Kinematik Denklemler">
+      <div class="slide-tape">FORMÜLLER</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">02.4 // SABİT İVME</div>
+          <h2 class="slide-title">SABİT İVMELİ HAREKET (4 TEMEL KİNEMATİK DENKLEM)</h2>
+          <div class="slide-subtitle">İvme sabit ($a_x = \text{sabit}$) olduğunda kullanılan hareket bağıntıları</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <table class="poster-table">
+          <thead>
+            <tr>
+              <th>Denklem Adı</th>
+              <th>Formül Bağıntısı</th>
+              <th>Eksik Değişken</th>
+              <th>Ne Zaman Kullanılır?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Hız-Zaman</strong></td>
+              <td>$$v_{xs} = v_{xi} + a_x t$$</td>
+              <td>Konum ($\Delta x$)</td>
+              <td>Zaman ve ivme biliniyorken son hızı bulmada</td>
+            </tr>
+            <tr>
+              <td><strong>2. Ortalama Hız ile Konum</strong></td>
+              <td>$$x_s = x_i + \frac{1}{2}(v_{xi} + v_{xs})t$$</td>
+              <td>İvme ($a_x$)</td>
+              <td>İvme bilgisi verilmediğinde doğrudan</td>
+            </tr>
+            <tr>
+              <td><strong>3. Konum-Zaman</strong></td>
+              <td>$$x_s = x_i + v_{xi}t + \frac{1}{2}a_x t^2$$</td>
+              <td>Son Hız ($v_{xs}$)</td>
+              <td>Zaman ve ivme ile katledilen yolu bulmada</td>
+            </tr>
+            <tr>
+              <td><strong>4. Zamansız Hız-Konum</strong></td>
+              <td>$$v_{xs}^2 = v_{xi}^2 + 2a_x (x_s - x_i)$$</td>
+              <td>Zaman ($t$)</td>
+              <td>Zaman bilinmediğinde ya da sorulmadığında</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 14: Serbest Düşme -->
+    <div class="slide" data-title="Serbest Düşme">
+      <div class="slide-tape">SERBEST DÜŞME</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">02.5 // YERÇEKİMİ ETKİSİ</div>
+          <h2 class="slide-title">SERBEST DÜŞME HAREKETİ (FREE FALL)</h2>
+          <div class="slide-subtitle">Hava direnci ihmal edildiğinde tek boyutlu düşey yerçekimi ivmesi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">FİZİKSEL ŞARTLAR</div>
+            <ul class="poster-list">
+              <li>Tüm cisimler kütleden bağımsız olarak aynı ivmeyle düşer:
+                <div class="formula-stamp lime-bg" style="margin:0.5rem 0;">g ≈ 9.80 m/s²</div>
+              </li>
+              <li>Aşağı yön negatif seçildiğinden kinematik denklemlerde $a_y = -g$ yazılır.</li>
+              <li>Tepe noktasında düşey anlık hız sıfırdır ($v_y = 0$).</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">DÜŞEY KİNEMATİK FORMÜLLERİ</div>
+            <div class="formula-stamp" style="font-size:1.15rem;">
+              $$v_y = v_{yi} - gt$$
+            </div>
+            <div class="formula-stamp" style="font-size:1.15rem;">
+              $$y_s = y_i + v_{yi}t - \frac{1}{2}gt^2$$
+            </div>
+            <div class="formula-stamp" style="font-size:1.15rem;">
+              $$v_{ys}^2 = v_{yi}^2 - 2g(y_s - y_i)$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 15: Çözümlü Problem 1 - Çıta ve Ceylan -->
+    <div class="slide" data-title="Problem 1: Çıta ve Ceylan">
+      <div class="slide-tape">PROBLEM 01</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">DERS NOTU ÇÖZÜMLÜ PROBLEM</div>
+          <h2 class="slide-title">ÇITA VE CEYLAN: TÜREVLİ KONUM DENKLEMİ</h2>
+          <div class="slide-subtitle">Konum fonksiyonu $x(t) = 20 + 5t^2$ (x metre, t saniye)</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">a) YER DEĞİŞTİRME</div>
+            <p>$t=1\text{s}$ ile $t=2\text{s}$ arası:</p>
+            <p>$$x(1) = 20 + 5(1)^2 = 25\text{ m}$$</p>
+            <p>$$x(2) = 20 + 5(2)^2 = 40\text{ m}$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.15rem;">
+              $$\Delta x = 40 - 25 = \mathbf{15 \text{ m}}$$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">b) ORTALAMA HIZ</div>
+            <p>Aynı zaman aralığında:</p>
+            <p>$$\Delta t = 2 - 1 = 1\text{ s}$$</p>
+            <div class="formula-stamp" style="font-size:1.15rem;">
+              $$v_{ort} = \frac{15\text{ m}}{1\text{ s}} = \mathbf{15 \text{ m/s}}$$
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">c) ANLIK HIZ (t=1s)</div>
+            <p>Konumun zamana göre türevi:</p>
+            <p>$$v(t) = \frac{dx}{dt} = 10t$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.15rem;">
+              $$v(1) = 10(1) = \mathbf{10 \text{ m/s}}$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16: Çözümlü Problem 2 - Araba Frenleme -->
+    <div class="slide" data-title="Problem 2: Araba Frenleme">
+      <div class="slide-tape">PROBLEM 02</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">DERS NOTU ÇÖZÜMLÜ PROBLEM</div>
+          <h2 class="slide-title">ARABA FRENLEME MESAFESİ VE SÜRESİ</h2>
+          <div class="slide-subtitle">$v_i = 30 \text{ m/s}$ hızla giderken $a = -5 \text{ m/s}^2$ sabit ivmeyle yavaşlama</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">a) DURMA MESAFESİ (Δx)</div>
+            <p>Verilenler: $v_i = 30\text{ m/s}, v_s = 0, a = -5\text{ m/s}^2$</p>
+            <p>Zamansız hız-konum bağıntısı kullanılır:</p>
+            <div class="formula-stamp">
+              $$v_s^2 = v_i^2 + 2a\Delta x$$
+            </div>
+            <p>$$0 = (30)^2 + 2(-5)\Delta x \implies 10\Delta x = 900$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.4rem;">
+              $$\Delta x = \mathbf{90 \text{ m}}$$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">b) DURANA KADAR GEÇEN SÜRE (t)</div>
+            <p>Hız-Zaman kinematik denkleminden:</p>
+            <div class="formula-stamp">
+              $$v_s = v_i + at$$
+            </div>
+            <p>$$0 = 30 + (-5)t \implies 5t = 30$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.4rem;">
+              $$t = \mathbf{6 \text{ s}}$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 17: Çözümlü Problem 3 - Polis Kovalama (1. Kısım) -->
+    <div class="slide" data-title="Problem 3: Polis Kovalama">
+      <div class="slide-tape">PROBLEM 03</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">DERS NOTU ÇÖZÜMLÜ PROBLEM (ADIM 1)</div>
+          <h2 class="slide-title">POLİS VE HIZ İHLALİ YAPAN ARAÇ KOVALAMA</h2>
+          <div class="slide-subtitle">Araba: $v_a = 15\text{ m/s}$ sabit  |  Polis: $v_{0p} = 0, a_p = 3\text{ m/s}^2$ ivmeli</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">a) YAKALAMA SÜRESİ (t_c)</div>
+            <p><strong>Arabanın Konumu:</strong> $x_a = 15t$</p>
+            <p><strong>Polisin Konumu:</strong> $x_p = \frac{1}{2}(3)t^2 = 1.5t^2$</p>
+            <p>Yakalama anında $x_a = x_p$:</p>
+            <p>$$15t = 1.5t^2 \implies 1.5t^2 - 15t = 0$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.4rem;">
+              $$\mathbf{t_c = 10 \text{ s}}$$
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">b) YAKALAMA ANINDA POLİSİN HIZI</div>
+            <p>Polisin hız denklemi:</p>
+            <div class="formula-stamp">
+              $$v_p = a_p \cdot t_c = (3\text{ m/s}^2)(10\text{ s})$$
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:1.4rem;">
+              $$v_p = \mathbf{30 \text{ m/s}}$$
+            </div>
+            <p style="text-align:center; color:#A7B0A4; font-size:0.9rem;">(Polisin hızı yakalanan aracın hızının tam iki katıdır!)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 18: Çözümlü Problem 3 - Maksimum Mesafe -->
+    <div class="slide" data-title="Problem 3: Maksimum Mesafe">
+      <div class="slide-tape">PROBLEM 03 (TÜREV)</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">DERS NOTU ÇÖZÜMLÜ PROBLEM (ADIM 2)</div>
+          <h2 class="slide-title">POLİS İLE ARAÇ ARASINDAKİ MAKSİMUM MESAFE</h2>
+          <div class="slide-subtitle">Maksimum aralıkta hızlar eşitlenir: $dS/dt = 0$</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">TÜREVSEL EKSTREMUM ANALİZİ</div>
+            <p>İki araç arasındaki mesafe fonksiyonu:</p>
+            <div class="formula-stamp">
+              $$S(t) = x_a - x_p = 15t - 1.5t^2$$
+            </div>
+            <p>Maksimum mesafe için 1. türev sıfıra eşitlenir:</p>
+            <p>$$\frac{dS}{dt} = 15 - 3t = 0 \implies \mathbf{t = 5 \text{ s}}$$</p>
+            <p style="color:var(--c-lime); font-size:0.9rem; margin-top:0.5rem;">Fiziksel Sezgi: $v_p(5s) = 3 \times 5 = 15\text{ m/s} = v_a$. Hızlar eşitlendiğinde mesafe tepe yapar!</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">MAKSİMUM MESAFE HESABI</div>
+            <p>$t=5\text{s}$ değerini fonksiyonda yerine yazalım:</p>
+            <p>$$S(5) = 15(5) - 1.5(5)^2$$</p>
+            <p>$$S(5) = 75 - 1.5(25) = 75 - 37.5$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.5rem;">
+              $$S_{maks} = \mathbf{37.5 \text{ m}} \approx \mathbf{38 \text{ m}}$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 19: Bölüm 3 - Vektörler Giriş -->
+    <div class="slide" data-title="Bölüm 3: Vektörler">
+      <div class="slide-tape">BÖLÜM 03</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03 // VEKTÖR ANALİZİ</div>
+          <h2 class="slide-title">SKALER VE VEKTÖREL BÜYÜKLÜKLER</h2>
+          <div class="slide-subtitle">Yönlü fiziksel nicelikler ve Kartezyen temsil ilkeleri</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">SKALER BÜYÜKLÜK</div>
+            <p>Yalnızca sayısal değer ve birim ile tamamen tanımlanır:</p>
+            <ul class="poster-list" style="margin-top:0.75rem;">
+              <li>Kütle ($m = 5\text{ kg}$)</li>
+              <li>Sıcaklık ($T = 20^\circ\text{C}$)</li>
+              <li>Zaman ($t = 12\text{ s}$)</li>
+              <li>Yoğunluk, Enerji, İş, Sürat</li>
+            </ul>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">VEKTÖREL BÜYÜKLÜK</div>
+            <p>Sayısal değerin yanında <strong>yön ve doğrultu</strong> şarttır:</p>
+            <ul class="poster-list" style="margin-top:0.75rem;">
+              <li>Kuvvet ($\vec{F}$)</li>
+              <li>Yer Değiştirme ($\Delta \vec{x}$)</li>
+              <li>Hız ($\vec{v}$)</li>
+              <li>İvme ($\vec{a}$), Momentum ($\vec{p}$)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="formula-stamp" style="font-size:1.1rem; margin-top:0.75rem;">
+          Vektör Gösterimi: $\vec{A}$ &nbsp;|&nbsp; Büyüklük (Şiddet): $|\vec{A}|$ veya $A \ge 0$
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 20: Vektör Özellikleri & Geometrik Toplama -->
+    <div class="slide" data-title="Vektör Geometrisi">
+      <div class="slide-tape">GEOMETRİ</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.2 // GRAFİK YÖNTEMLER</div>
+          <h2 class="slide-title">VEKTÖR ÖZELLİKLERİ VE UÇ UCA EKLEME</h2>
+          <div class="slide-subtitle">Eşitlik, ters vektör, poligon yöntemi ve değişme kuralları</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">TEMEL ÖZELLİKLER</div>
+            <ul class="poster-list">
+              <li><strong>Eşitlik:</strong> Hem büyüklükleri hem yönleri aynı olmalıdır ($\vec{A} = \vec{B}$).</li>
+              <li><strong>Negatif Vektör:</strong> Aynı büyüklükte tam zıt ($180^\circ$) yöndeki vektördür:
+                $$\vec{A} + (-\vec{A}) = \vec{0}$$
+              </li>
+              <li><strong>Çıkarma:</strong> Zıt vektör ile toplama olarak tanımlanır:
+                $$\vec{A} - \vec{B} = \vec{A} + (-\vec{B})$$
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">UÇ UCA EKLEME & CEBİR</div>
+            <p>İlk vektörün ucuna ikincinin başlangıcı eklenir. Başlangıçtan son uca çizilen vektör bileşkedir ($\vec{R} = \vec{A} + \vec{B}$).</p>
+            
+            <div class="formula-stamp" style="margin-top:1rem;">
+              Değişme: $\vec{A} + \vec{B} = \vec{B} + \vec{A}$
+            </div>
+            <div class="formula-stamp">
+              Birleşme: $\vec{A} + (\vec{B} + \vec{C}) = (\vec{A} + \vec{B}) + \vec{C}$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 21: Dik Bileşenler ve Bölgeler -->
+    <div class="slide" data-title="Dik Bileşenler">
+      <div class="slide-tape">BİLEŞENLER</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.3 // KARTEZYEN KOORDİNATLAR</div>
+          <h2 class="slide-title">KARTEZYEN KOORDİNATLARDA DİK BİLEŞENLER</h2>
+          <div class="slide-subtitle">Trigonometrik ayrıştırma ve 4 bölge açı düzeltme matrisi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">BİLEŞEN FORMÜLLERİ</div>
+            <div class="formula-stamp lime-bg" style="font-size:1.25rem;">
+              $$A_x = A \cos\theta, \quad A_y = A \sin\theta$$
+            </div>
+            <p style="margin-top:0.75rem;">Bileşenlerden Büyüklük ve Yön:</p>
+            <div class="formula-stamp">
+              $$A = \sqrt{A_x^2 + A_y^2}$$
+            </div>
+            <div class="formula-stamp">
+              $$\theta = \tan^{-1}\left(\frac{A_y}{A_x}\right)$$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">4 BÖLGE İŞARET TABLOSU</div>
+            <table class="poster-table">
+              <thead>
+                <tr>
+                  <th>Bölge</th>
+                  <th>$A_x$</th>
+                  <th>$A_y$</th>
+                  <th>Açı Düzeltmesi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>1. Bölge</strong></td><td>$+$</td><td>$+$</td><td>$\theta = \tan^{-1}(A_y/A_x)$</td></tr>
+                <tr><td><strong>2. Bölge</strong></td><td>$-$</td><td>$+$</td><td>$\theta = 180^\circ + \tan^{-1}(A_y/A_x)$</td></tr>
+                <tr><td><strong>3. Bölge</strong></td><td>$-$</td><td>$-$</td><td>$\theta = 180^\circ + \tan^{-1}(A_y/A_x)$</td></tr>
+                <tr><td><strong>4. Bölge</strong></td><td>$+$</td><td>$-$</td><td>$\theta = 360^\circ + \tan^{-1}(A_y/A_x)$</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 22: Birim Vektörler ve Analitik Toplama -->
+    <div class="slide" data-title="Birim Vektörler">
+      <div class="slide-tape">BİRİM VEKTÖRLER</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.4 // ANALİTİK CEBİR</div>
+          <h2 class="slide-title">BİRİM VEKTÖRLER (i, j, k) VE ANALİTİK TOPLAMA</h2>
+          <div class="slide-subtitle">Kartezyen eksen yönleri ve analitik bileşke formülasyonu</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">BİRİM VEKTÖR TANIMI</div>
+            <p>Büyüklüğü tam olarak $1$ birim olan boyutsuz yön vektörleridir:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.3rem;">
+              $$|\hat{i}| = |\hat{j}| = |\hat{k}| = 1$$
+            </div>
+            <ul class="poster-list" style="margin-top:0.75rem;">
+              <li>$\hat{i}$: $+x$ ekseni yönünde</li>
+              <li>$\hat{j}$: $+y$ ekseni yönünde</li>
+              <li>$\hat{k}$: $+z$ ekseni yönünde</li>
+            </ul>
+            <p style="margin-top:0.5rem;">$$\vec{A} = A_x\hat{i} + A_y\hat{j} + A_z\hat{k}$$</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">ANALİTİK VEKTÖR TOPLAMI</div>
+            <p>İki vektör $\vec{A}$ ve $\vec{B}$ toplandığında bileşke $\vec{R}$:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.15rem;">
+              $$\vec{R} = (A_x + B_x)\hat{i} + (A_y + B_y)\hat{j} + (A_z + B_z)\hat{k}$$
+            </div>
+            <p style="margin-top:0.75rem;">Bileşke Vektörün Büyüklüğü:</p>
+            <div class="formula-stamp">
+              $$R = \sqrt{R_x^2 + R_y^2 + R_z^2}$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 23: Büyük Özet Formül Tablosu -->
+    <div class="slide" data-title="Büyük Özet Tablosu">
+      <div class="slide-tape">BÜYÜK ÖZET</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">04 // FORMÜL MİMARİSİ</div>
+          <h2 class="slide-title">FİZİK 1 TÜM TEMEL FORMÜLLERİN ÖZETİ</h2>
+          <div class="slide-subtitle">Sınav öncesi hızlı başvuru ve tekrar tablosu</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <table class="poster-table">
+          <thead>
+            <tr>
+              <th>Konu / Nicelik</th>
+              <th>Formül Bağıntısı</th>
+              <th>Fiziksel Açıklama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Ortalama Hız</strong></td>
+              <td>$v_{ort} = \frac{\Delta x}{\Delta t}$</td>
+              <td>Yer değiştirmenin geçen zamana oranı</td>
+            </tr>
+            <tr>
+              <td><strong>Anlık Hız</strong></td>
+              <td>$v = \frac{dx}{dt}$</td>
+              <td>Konumun zamana göre 1. türevi ($x-t$ teğet eğimi)</td>
+            </tr>
+            <tr>
+              <td><strong>Ortalama İvme</strong></td>
+              <td>$a_{ort} = \frac{\Delta v}{\Delta t}$</td>
+              <td>Hız değişiminin geçen süreye oranı</td>
+            </tr>
+            <tr>
+              <td><strong>Anlık İvme</strong></td>
+              <td>$a = \frac{dv}{dt} = \frac{d^2x}{dt^2}$</td>
+              <td>Hızın zamana göre türevi ($v-t$ teğet eğimi)</td>
+            </tr>
+            <tr>
+              <td><strong>Kinematik 1</strong></td>
+              <td>$v_s = v_i + at$</td>
+              <td>Sabit ivmeli hız-zaman bağıntısı</td>
+            </tr>
+            <tr>
+              <td><strong>Kinematik 2</strong></td>
+              <td>$x_s = x_i + v_{xi}t + \frac{1}{2}at^2$</td>
+              <td>Sabit ivmeli konum-zaman bağıntısı</td>
+            </tr>
+            <tr>
+              <td><strong>Kinematik 3</strong></td>
+              <td>$v_s^2 = v_i^2 + 2a\Delta x$</td>
+              <td>Zamansız hız-konum bağıntısı</td>
+            </tr>
+            <tr>
+              <td><strong>Vektör Büyüklüğü</strong></td>
+              <td>$A = \sqrt{A_x^2 + A_y^2}$</td>
+              <td>Pisagor teoremi ile şiddet hesabı</td>
+            </tr>
+            <tr>
+              <td><strong>Vektör Açısı</strong></td>
+              <td>$\theta = \tan^{-1}(A_y / A_x)$</td>
+              <td>$+x$ ekseni ile yapılan standart yön açısı</td>
+            </tr>
+            <tr>
+              <td><strong>Analitik Bileşke</strong></td>
+              <td>$\vec{R} = (A_x+B_x)\hat{i} + (A_y+B_y)\hat{j}$</td>
+              <td>Bileşenler bazında vektörel toplama</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 24: Sınav İpuçları -->
+    <div class="slide" data-title="Sınav İpuçları">
+      <div class="slide-tape">STRATEJİ</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">05 // SINAV BAŞARISI</div>
+          <h2 class="slide-title">SINAV İPUÇLARI VE ÖNEMLİ HATIRLATMALAR</h2>
+          <div class="slide-subtitle">Sık yapılan hatalar ve çözüm tüyoları</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">1. BOYUT KONTROLÜ</div>
+            <p>Formülü unuttuğunuzda üs eşitleme yöntemiyle $[L][T]^{-2}$ gibi boyutları eşitleyerek bağıntıyı hemen kurtarabilirsiniz.</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.1rem; margin-top:1rem;">
+              a = v²/r &nbsp;|&nbsp; T = 2π√(l/g)
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">2. İŞARETLERİN YÖNÜ</div>
+            <p>Hız ve ivme zıt işaretliyse cisim <strong>YAVAŞLAR</strong>. Serbest düşmede aşağı yön negatif alındığında $a_y = -9.80\text{ m/s}^2$ yazılmalıdır.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">3. KOVALAMA SORULARI</div>
+            <p>Maksimum mesafe $dS/dt = 0$ anında, yani iki aracın hızları birbirine eşitlendiğinde ortaya çıkar.</p>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">4. BÖLGE AÇI DÜZELTMESİ</div>
+            <p>$A_x < 0$ olduğunda hesap makinesinin verdiği $\tan^{-1}$ açısına mutlaka $180^\circ$ eklemeyi unutmayın!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 25: Kapanış -->
+    <div class="slide title-slide" data-title="Kapanış">
+      <div class="slide-tape">FİNAL</div>
+      <h1>BAŞARILAR!</h1>
+      <h2>Fizik 1 (FZM 105) Çalışma Kılavuzu Tamamlandı</h2>
+      <div class="title-meta-box">
+        <div>Kâğıt Poster Estetiğinde Sunum ve Motion Graphics Paketi</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav Controls -->
+  <div id="nav-controls">
+    <div style="display:flex; align-items:center; gap:0.85rem;">
+      <button class="nav-btn" id="btn-prev">◀ Önceki</button>
+      <button class="nav-btn" id="btn-next">Sonraki ▶</button>
+      <span id="slide-counter">01 / 25</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:0.85rem;">
+      <button class="nav-btn secondary" id="btn-fullscreen">⛶ Tam Ekran</button>
+      <button class="nav-btn" id="btn-print" onclick="window.print()">🖨️ PDF / Yazdır</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let currentIdx = 0;
+    const totalSlides = slides.length;
+
+    const counter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('progress-bar');
+
+    // Web Audio API tactile paper sound effects
+    let audioCtx = null;
+    function playSlideSound() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+
+        // 1. Paper rustle noise
+        const bufferSize = audioCtx.sampleRate * 0.06;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
+        }
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1400, now);
+        filter.Q.setValueAtTime(2.5, now);
+
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.setValueAtTime(0.08, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+        whiteNoise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(audioCtx.destination);
+        whiteNoise.start(now);
+
+        // 2. Subtle mechanical click
+        const osc = audioCtx.createOscillator();
+        const oscGain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(60, now + 0.05);
+
+        oscGain.gain.setValueAtTime(0.06, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+        osc.connect(oscGain);
+        oscGain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } catch (e) {}
+    }
+
+    function updateSlide(playSound = true) {
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === currentIdx);
+      });
+      counter.textContent = `${String(currentIdx + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      const pct = (currentIdx / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${pct}%`;
+      if (playSound) playSlideSound();
+    }
+
+    function nextSlide() {
+      if (currentIdx < totalSlides - 1) {
+        currentIdx++;
+        updateSlide(true);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        updateSlide(true);
+      }
+    }
+
+    document.getElementById('btn-next').addEventListener('click', nextSlide);
+    document.getElementById('btn-prev').addEventListener('click', prevSlide);
+
+    window.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'f':
+        case 'F':
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          } else {
+            document.exitFullscreen().catch(() => {});
+          }
+          break;
+      }
+    });
+
+    document.getElementById('btn-fullscreen').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    updateSlide(false);
+  </script>
+</body>
+</html>

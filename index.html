@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+  <title>Fizik 1 - Kâğıt Poster Motion Graphics</title>
+  <!-- Google Fonts: Oswald (bold condensed), Space Mono, Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d0f0c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Space Mono', monospace;
+      overflow: hidden;
+    }
+
+    body.headless #controls {
+      display: none !important;
+    }
+
+    #stage-container {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85);
+      background: #F3F0E6;
+      overflow: hidden;
+      transform-origin: center center;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      display: block;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(17, 20, 16, 0.92);
+      border: 1px solid #68725F;
+      border-radius: 8px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #F3F0E6;
+      font-size: 14px;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+    }
+
+    .btn {
+      background: #D5FA73;
+      color: #111410;
+      border: none;
+      padding: 6px 16px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #e4ff8f;
+    }
+
+    #time-slider {
+      width: 420px;
+      accent-color: #D5FA73;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stage-container">
+    <canvas id="main-canvas" width="1920" height="1080"></canvas>
+  </div>
+
+  <div id="controls">
+    <button class="btn" id="play-btn">Oynat / Durdur</button>
+    <input type="range" id="time-slider" min="0" max="24" step="0.033" value="0">
+    <span id="time-display">00.00s / 24.00s</span>
+    <a href="Fizik1_Kagit_Poster_Sunum.html" class="btn" style="text-decoration:none; display:inline-flex; align-items:center; background:#F3F0E6; color:#111410;">📚 25 Slaytlık Sunumu Aç</a>
+  </div>
+
+  <script>
+    if (new URLSearchParams(window.location.search).get('headless') === '1') {
+      document.body.classList.add('headless');
+    }
+
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+    const DURATION = 24.0;
+
+    // Kâğıt Poster Palette
+    const C_CREAM = "#F3F0E6";
+    const C_DARK  = "#111410";
+    const C_OLIVE = "#68725F";
+    const C_LIME  = "#D5FA73";
+
+    // Static paper texture
+    const grainCanvas = document.createElement('canvas');
+    grainCanvas.width = 300;
+    grainCanvas.height = 300;
+    const gctx = grainCanvas.getContext('2d');
+    const gimg = gctx.createImageData(300, 300);
+    for (let i = 0; i < gimg.data.length; i += 4) {
+      const v = (Math.random() * 20 - 10);
+      gimg.data[i] = 243 + v;
+      gimg.data[i+1] = 240 + v;
+      gimg.data[i+2] = 230 + v;
+      gimg.data[i+3] = 24;
+    }
+    gctx.putImageData(gimg, 0, 0);
+
+    function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+    function easeInOutCubic(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+    function easeOutBack(x) {
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+    }
+    function smoothProg(t, start, end) {
+      if (t <= start) return 0;
+      if (t >= end) return 1;
+      return easeInOutCubic((t - start) / (end - start));
+    }
+
+    function drawTape(x, y, w, h, angle) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle * Math.PI / 180);
+      ctx.fillStyle = C_LIME;
+      ctx.fillRect(-w/2, -h/2, w, h);
+      ctx.fillStyle = "rgba(17, 20, 16, 0.2)";
+      ctx.fillRect(-w/2, h/2 - 3, w, 3);
+      ctx.restore();
+    }
+
+    function drawArrow(fromX, fromY, toX, toY, color, width, headSize = 16) {
+      const dx = toX - fromX;
+      const dy = toY - fromY;
+      const angle = Math.atan2(dy, dx);
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headSize * Math.cos(angle - Math.PI / 6), toY - headSize * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headSize * Math.cos(angle + Math.PI / 6), toY - headSize * Math.sin(angle + Math.PI / 6));
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    window.seek = function(t) {
+      t = clamp(t, 0, DURATION);
+
+      // Base Paper
+      ctx.fillStyle = C_CREAM;
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Grain
+      ctx.save();
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = ctx.createPattern(grainCanvas, 'repeat');
+      ctx.fillRect(0, 0, 1920, 1080);
+      ctx.restore();
+
+      // Outer Frame
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = C_DARK;
+      ctx.strokeRect(60, 60, 1800, 960);
+
+      // Top Banner
+      ctx.fillStyle = C_DARK;
+      ctx.font = "900 22px 'Oswald', sans-serif";
+      ctx.fillText("FİZİK 1: MEKANİK ÇALIŞMA NOTLARI // FZM 105", 85, 105);
+      
+      ctx.font = "italic 700 16px 'Playfair Display', serif";
+      ctx.fillStyle = C_OLIVE;
+      ctx.fillText("~ Berk'ten Sevgilerle ~", 620, 105);
+
+      ctx.font = "700 16px 'Space Mono', monospace";
+      ctx.fillText("BÖLÜM 01-03: DOĞRUSAL HAREKET & VEKTÖR ANALİZİ", 1300, 105);
+
+      ctx.beginPath();
+      ctx.moveTo(60, 130);
+      ctx.lineTo(1860, 130);
+      ctx.strokeStyle = C_DARK;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Lime Washi Tapes on outer frame (hidden in final poster scene)
+      if (t < 19.2) {
+        drawTape(960, 60, 130, 32, -1);
+        drawTape(320, 60, 90, 26, 2);
+        drawTape(1600, 60, 90, 26, -2);
+      }
+
+      // -------------------------------------------------------------
+      // SCENE 1 (0.0s - 4.5s): BOYUT ANALİZİ & DAİRESEL İVME
+      // -------------------------------------------------------------
+      if (t < 5.0) {
+        const s1Alpha = t < 4.0 ? 1 : 1 - (t - 4.0);
+        ctx.save();
+        ctx.globalAlpha = clamp(s1Alpha, 0, 1);
+
+        const titleProg = smoothProg(t, 0.2, 0.9);
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 84px 'Oswald', sans-serif";
+        ctx.fillText("01 // BOYUT ANALİZİ", 100, 230 - (1 - titleProg) * 20);
+
+        ctx.font = "700 24px 'Playfair Display', serif";
+        ctx.fillStyle = C_OLIVE;
+        ctx.fillText("Doğa olaylarını yöneten üslerin matematiksel tutarlılığı", 104, 275);
+
+        // Left Dark Card
+        const blockProg = smoothProg(t, 0.4, 1.2);
+        const bw = 540 * blockProg;
+        ctx.fillStyle = C_DARK;
+        ctx.fillRect(100, 320, bw, 580);
+
+        if (blockProg > 0.6) {
+          ctx.fillStyle = C_CREAM;
+          ctx.font = "900 32px 'Oswald', sans-serif";
+          ctx.fillText("TEMEL SI BOYUTLARI", 140, 385);
+
+          ctx.font = "400 18px 'Space Mono', monospace";
+          ctx.fillStyle = "#A3ACA0";
+          ctx.fillText("[L] = Uzunluk (metre)", 140, 445);
+          ctx.fillText("[M] = Kütle (kilogram)", 140, 485);
+          ctx.fillText("[T] = Zaman (saniye)", 140, 525);
+
+          // Dimension Box
+          ctx.fillStyle = C_LIME;
+          ctx.fillRect(140, 575, 460, 75);
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 32px 'Oswald', sans-serif";
+          ctx.fillText("[a] = [L] · [T]⁻² = m/s²", 165, 625);
+
+          ctx.fillStyle = C_CREAM;
+          ctx.font = "400 17px 'Space Mono', monospace";
+          ctx.fillText("Model: a = k · r^n · v^m", 140, 715);
+          ctx.fillText("Çözüm: n = -1,  m = 2", 140, 755);
+        }
+
+        // Right Illustration: Circular Motion Orbit
+        const circProg = smoothProg(t, 0.8, 2.2);
+        const cx = 1250, cy = 600, radius = 240;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2 * circProg);
+        ctx.strokeStyle = C_OLIVE;
+        ctx.lineWidth = 4;
+        ctx.setLineDash([12, 10]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        if (t >= 1.2) {
+          const angle = (t - 1.2) * 2.3;
+          const px = cx + Math.cos(angle) * radius;
+          const py = cy + Math.sin(angle) * radius;
+
+          // Particle
+          ctx.beginPath();
+          ctx.arc(px, py, 18, 0, Math.PI * 2);
+          ctx.fillStyle = C_DARK;
+          ctx.fill();
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = C_LIME;
+          ctx.stroke();
+
+          // Velocity vector (tangent)
+          const vx = -Math.sin(angle) * 120;
+          const vy = Math.cos(angle) * 120;
+          drawArrow(px, py, px + vx, py + vy, C_DARK, 6, 18);
+          ctx.font = "700 20px 'Space Mono', monospace";
+          ctx.fillStyle = C_DARK;
+          ctx.fillText("v (Hız)", px + vx + 12, py + vy + 6);
+
+          // Centripetal acceleration (to center)
+          const ax = -Math.cos(angle) * 150;
+          const ay = -Math.sin(angle) * 150;
+          drawArrow(px, py, px + ax, py + ay, C_LIME, 7, 20);
+          ctx.fillText("a (İvme)", px + ax * 0.7 - 25, py + ay * 0.7 - 12);
+        }
+
+        // Stamped Result Formula
+        if (t >= 2.0) {
+          const stampProg = easeOutBack(clamp((t - 2.0) / 0.6, 0, 1));
+          ctx.save();
+          ctx.translate(1250, 600);
+          ctx.scale(stampProg, stampProg);
+          ctx.fillStyle = C_CREAM;
+          ctx.fillRect(-180, -65, 360, 130);
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = C_DARK;
+          ctx.strokeRect(-180, -65, 360, 130);
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 52px 'Oswald', sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("a = v² / r", 0, 10);
+          ctx.font = "700 16px 'Space Mono', monospace";
+          ctx.fillStyle = C_OLIVE;
+          ctx.fillText("MERKEZCİL İVME FORMÜLÜ", 0, 46);
+          ctx.textAlign = "left";
+          ctx.restore();
+        }
+
+        ctx.restore();
+      }
+
+      // -------------------------------------------------------------
+      // SCENE 2 (4.5s - 9.5s): TEK BOYUTTA HAREKET & İŞARET KURALI
+      // -------------------------------------------------------------
+      if (t >= 4.2 && t < 10.0) {
+        const s2In = smoothProg(t, 4.2, 5.0);
+        const s2Out = t > 9.0 ? 1 - smoothProg(t, 9.0, 9.8) : 1;
+        ctx.save();
+        ctx.globalAlpha = s2In * s2Out;
+
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 84px 'Oswald', sans-serif";
+        ctx.fillText("02 // HIZ VE İVME VEKTÖRLERİ", 100, 230);
+        ctx.font = "700 24px 'Playfair Display', serif";
+        ctx.fillStyle = C_OLIVE;
+        ctx.fillText("İşaretler aynıysa hızlanma, zıt ise yavaşlama gerçekleşir", 104, 275);
+
+        // Linear track
+        const axisY = 460;
+        ctx.beginPath();
+        ctx.moveTo(140, axisY);
+        ctx.lineTo(1780, axisY);
+        ctx.strokeStyle = C_DARK;
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        for (let x = 200; x <= 1700; x += 150) {
+          ctx.beginPath();
+          ctx.moveTo(x, axisY - 12);
+          ctx.lineTo(x, axisY + 12);
+          ctx.strokeStyle = C_OLIVE;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+          ctx.font = "700 15px 'Space Mono', monospace";
+          ctx.fillStyle = C_OLIVE;
+          ctx.fillText(`${(x - 200) / 15}m`, x - 15, axisY + 36);
+        }
+
+        // Particle Moving Along Axis with deceleration
+        const motionP = clamp((t - 5.0) / 3.8, 0, 1);
+        const carX = 220 + (1400 * (1 - Math.pow(1 - motionP, 2)));
+
+        ctx.fillStyle = "rgba(17, 20, 16, 0.25)";
+        ctx.beginPath();
+        ctx.ellipse(carX, axisY + 18, 50, 12, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Vehicle Block
+        ctx.fillStyle = C_DARK;
+        ctx.fillRect(carX - 45, axisY - 45, 90, 45);
+        ctx.fillStyle = C_LIME;
+        ctx.fillRect(carX + 15, axisY - 35, 20, 20);
+        ctx.fillStyle = C_CREAM;
+        ctx.fillRect(carX - 35, axisY - 15, 25, 12);
+
+        // Forward Velocity Vector v (Lime Arrow)
+        const vLen = Math.max(0, 260 * (1 - motionP));
+        if (vLen > 25) {
+          drawArrow(carX + 45, axisY - 22, carX + 45 + vLen, axisY - 22, C_LIME, 8, 20);
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 24px 'Oswald', sans-serif";
+          ctx.fillText(`v > 0 (${Math.round(30 * (1 - motionP))} m/s)`, carX + 55 + vLen, axisY - 14);
+        }
+
+        // Backward Acceleration Vector a
+        const aLen = 180;
+        drawArrow(carX - 45, axisY - 22, carX - 45 - aLen, axisY - 22, C_DARK, 8, 20);
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 24px 'Oswald', sans-serif";
+        ctx.fillText("a < 0 (-5 m/s²)", carX - 45 - aLen - 175, axisY - 14);
+
+        // 4 State Matrix Cards
+        const matY = 620;
+        const boxes = [
+          { v: "v > 0  |  a > 0", state: "POZİTİF HIZLANAN", desc: "Aynı yönlü, sürat artar", active: false },
+          { v: "v > 0  |  a < 0", state: "POZİTİF YAVAŞLAYAN", desc: "Frenleme: Durma Mesafesi Δx=90m", active: true },
+          { v: "v < 0  |  a > 0", state: "NEGATİF YAVAŞLAYAN", desc: "Ters yönde yavaşlar", active: false },
+          { v: "v < 0  |  a < 0", state: "NEGATİF HIZLANAN", desc: "Ters yönde sürat artar", active: false }
+        ];
+
+        boxes.forEach((b, i) => {
+          const bx = 100 + i * 435;
+          ctx.fillStyle = b.active ? C_DARK : "#E5E1D4";
+          ctx.fillRect(bx, matY, 410, 260);
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = C_DARK;
+          ctx.strokeRect(bx, matY, 410, 260);
+
+          if (b.active) {
+            drawTape(bx + 205, matY, 100, 24, 0);
+          }
+
+          ctx.fillStyle = b.active ? C_LIME : C_DARK;
+          ctx.font = "900 28px 'Oswald', sans-serif";
+          ctx.fillText(b.v, bx + 30, matY + 65);
+
+          ctx.font = "900 22px 'Oswald', sans-serif";
+          ctx.fillStyle = b.active ? C_CREAM : C_DARK;
+          ctx.fillText(b.state, bx + 30, matY + 120);
+
+          ctx.font = "400 16px 'Space Mono', monospace";
+          ctx.fillStyle = b.active ? "#C2C9BE" : C_OLIVE;
+          ctx.fillText(b.desc, bx + 30, matY + 165);
+
+          if (b.active) {
+            ctx.fillStyle = C_LIME;
+            ctx.font = "700 18px 'Space Mono', monospace";
+            ctx.fillText("Örnek 2: Δx = 90m  (t = 6s)", bx + 30, matY + 215);
+          }
+        });
+
+        ctx.restore();
+      }
+
+      // -------------------------------------------------------------
+      // SCENE 3 (9.5s - 15.0s): KOVALAMA PROBLEMİ (Polis & Hız İhlali)
+      // -------------------------------------------------------------
+      if (t >= 9.2 && t < 15.5) {
+        const s3In = smoothProg(t, 9.2, 10.0);
+        const s3Out = t > 14.5 ? 1 - smoothProg(t, 14.5, 15.3) : 1;
+        ctx.save();
+        ctx.globalAlpha = s3In * s3Out;
+
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 84px 'Oswald', sans-serif";
+        ctx.fillText("03 // KOVALAMA PROBLEMİ: POLİS & İHLAL", 100, 230);
+        ctx.font = "700 24px 'Playfair Display', serif";
+        ctx.fillStyle = C_OLIVE;
+        ctx.fillText("Maksimum mesafe: Polisin hızı araca eşitlendiğinde (dS/dt = 0)", 104, 275);
+
+        // Coordinate Graph for Chase
+        const gx = 180, gy = 860, gw = 1000, gh = 480;
+        ctx.beginPath();
+        ctx.moveTo(gx, gy - gh);
+        ctx.lineTo(gx, gy);
+        ctx.lineTo(gx + gw, gy);
+        ctx.strokeStyle = C_DARK;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        ctx.font = "700 18px 'Space Mono', monospace";
+        ctx.fillStyle = C_DARK;
+        ctx.fillText("Konum x (metre)", gx - 40, gy - gh - 20);
+        ctx.fillText("Zaman t (s)", gx + gw + 15, gy + 8);
+
+        const tScale = gw / 12;
+        const yScale = gh / 180;
+
+        ctx.fillText("t = 0", gx, gy + 32);
+        ctx.fillText("t = 5s (Maksimum)", gx + 5 * tScale - 75, gy + 32);
+        ctx.fillText("t = 10s (Yakalama)", gx + 10 * tScale - 75, gy + 32);
+
+        // Dashed lines
+        ctx.beginPath();
+        ctx.moveTo(gx + 5 * tScale, gy);
+        ctx.lineTo(gx + 5 * tScale, gy - 75 * yScale);
+        ctx.moveTo(gx + 10 * tScale, gy);
+        ctx.lineTo(gx + 10 * tScale, gy - 150 * yScale);
+        ctx.strokeStyle = C_OLIVE;
+        ctx.setLineDash([8, 8]);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const curT = clamp((t - 10.0) / 4.0 * 11, 0, 11);
+
+        // 1. Car line
+        ctx.beginPath();
+        ctx.moveTo(gx, gy);
+        for (let st = 0; st <= curT; st += 0.2) {
+          ctx.lineTo(gx + st * tScale, gy - (15 * st) * yScale);
+        }
+        ctx.strokeStyle = C_DARK;
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        if (curT > 2) {
+          ctx.font = "900 20px 'Oswald', sans-serif";
+          ctx.fillStyle = C_DARK;
+          ctx.fillText("x_araç = 15t (Sabit Hızlı Araç)", gx + 2 * tScale, gy - 30 * yScale - 35);
+        }
+
+        // 2. Police Parabola
+        ctx.beginPath();
+        ctx.moveTo(gx, gy);
+        for (let st = 0; st <= curT; st += 0.2) {
+          ctx.lineTo(gx + st * tScale, gy - (1.5 * st * st) * yScale);
+        }
+        ctx.strokeStyle = C_LIME;
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        if (curT > 4) {
+          ctx.font = "900 20px 'Oswald', sans-serif";
+          ctx.fillStyle = C_DARK;
+          ctx.fillText("x_polis = 1.5t² (İvmeli Polis)", gx + 6.5 * tScale, gy - (1.5 * 6.5 * 6.5) * yScale + 40);
+        }
+
+        // Gap highlight at t = 5s
+        if (curT >= 5.0) {
+          const x5 = gx + 5 * tScale;
+          const yCar = gy - 75 * yScale;
+          const yPol = gy - 37.5 * yScale;
+
+          drawArrow(x5, yCar, x5, yPol, C_DARK, 4, 14);
+          drawArrow(x5, yPol, x5, yCar, C_DARK, 4, 14);
+
+          ctx.fillStyle = C_LIME;
+          ctx.fillRect(x5 + 20, (yCar + yPol) / 2 - 25, 230, 50);
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 22px 'Oswald', sans-serif";
+          ctx.fillText("ΔS_maks = 37.5 m", x5 + 35, (yCar + yPol) / 2 + 8);
+        }
+
+        // Catch event at t = 10s
+        if (curT >= 10.0) {
+          const x10 = gx + 10 * tScale;
+          const y10 = gy - 150 * yScale;
+          ctx.beginPath();
+          ctx.arc(x10, y10, 14, 0, Math.PI * 2);
+          ctx.fillStyle = C_LIME;
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = C_DARK;
+          ctx.fillRect(x10 + 25, y10 - 30, 240, 60);
+          ctx.fillStyle = C_CREAM;
+          ctx.font = "900 24px 'Oswald', sans-serif";
+          ctx.fillText("YAKALAMA: t = 10s", x10 + 40, y10 + 8);
+        }
+
+        // Right Info Card
+        ctx.fillStyle = C_DARK;
+        ctx.fillRect(1280, 360, 560, 500);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = C_LIME;
+        ctx.strokeRect(1280, 360, 560, 500);
+
+        ctx.fillStyle = C_CREAM;
+        ctx.font = "900 32px 'Oswald', sans-serif";
+        ctx.fillText("TÜREVSEL ÇÖZÜM", 1320, 420);
+
+        ctx.font = "400 17px 'Space Mono', monospace";
+        ctx.fillStyle = "#A3ACA0";
+        ctx.fillText("Mesafe Fonksiyonu:", 1320, 470);
+        ctx.fillStyle = C_LIME;
+        ctx.font = "700 22px 'Space Mono', monospace";
+        ctx.fillText("S(t) = 15t - 1.5t²", 1320, 510);
+
+        ctx.font = "400 17px 'Space Mono', monospace";
+        ctx.fillStyle = "#A3ACA0";
+        ctx.fillText("Maksimum için dS/dt = 0:", 1320, 570);
+        ctx.fillStyle = C_CREAM;
+        ctx.fillText("15 - 3t = 0  ==>  t = 5 s", 1320, 610);
+
+        ctx.fillStyle = C_LIME;
+        ctx.fillRect(1320, 660, 480, 90);
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 30px 'Oswald', sans-serif";
+        ctx.fillText("v_polis(10s) = 30 m/s", 1345, 715);
+        ctx.font = "700 15px 'Space Mono', monospace";
+        ctx.fillText("İhlal yapan aracın tam 2 katı!", 1345, 735);
+
+        ctx.restore();
+      }
+
+      // -------------------------------------------------------------
+      // SCENE 4 (15.0s - 19.5s): VEKTÖR CEBİRİ & BİRİM VEKTÖRLER
+      // -------------------------------------------------------------
+      if (t >= 14.8 && t < 20.0) {
+        const s4In = smoothProg(t, 14.8, 15.6);
+        const s4Out = t > 19.0 ? 1 - smoothProg(t, 19.0, 19.8) : 1;
+        ctx.save();
+        ctx.globalAlpha = s4In * s4Out;
+
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 84px 'Oswald', sans-serif";
+        ctx.fillText("04 // VEKTÖR CEBİRİ & BİRİM VEKTÖRLER", 100, 230);
+        ctx.font = "700 24px 'Playfair Display', serif";
+        ctx.fillStyle = C_OLIVE;
+        ctx.fillText("Analitik toplama: R = (A_x + B_x) i + (A_y + B_y) j", 104, 275);
+
+        // Cartesian Grid
+        const ox = 500, oy = 720;
+        ctx.beginPath();
+        for (let x = 150; x <= 1000; x += 70) {
+          ctx.moveTo(x, 340); ctx.lineTo(x, 860);
+        }
+        for (let y = 340; y <= 860; y += 70) {
+          ctx.moveTo(150, y); ctx.lineTo(1000, y);
+        }
+        ctx.strokeStyle = "rgba(104, 114, 95, 0.25)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(150, oy); ctx.lineTo(1050, oy);
+        ctx.moveTo(ox, 860); ctx.lineTo(ox, 340);
+        ctx.strokeStyle = C_DARK;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        ctx.font = "900 22px 'Oswald', sans-serif";
+        ctx.fillStyle = C_DARK;
+        ctx.fillText("+X (i birim)", 1060, oy + 8);
+        ctx.fillText("+Y (j birim)", ox - 20, 325);
+
+        const vecProg = smoothProg(t, 15.5, 17.0);
+        const ax = 280 * vecProg;
+        const ay = -140 * vecProg;
+
+        drawArrow(ox, oy, ox + ax, oy + ay, C_DARK, 6, 18);
+        ctx.font = "900 26px 'Oswald', sans-serif";
+        ctx.fillText("A Vektörü", ox + ax / 2 - 35, oy + ay / 2 - 15);
+
+        if (t >= 16.5) {
+          const bProg = smoothProg(t, 16.5, 17.8);
+          const bx = 180 * bProg;
+          const by = -160 * bProg;
+
+          drawArrow(ox + 280, oy - 140, ox + 280 + bx, oy - 140 + by, C_OLIVE, 6, 18);
+          ctx.fillText("B Vektörü", ox + 280 + bx / 2 + 15, oy - 140 + by / 2);
+
+          if (t >= 17.5) {
+            const rProg = smoothProg(t, 17.5, 18.5);
+            const rx = (280 + 180) * rProg;
+            const ry = (-140 - 160) * rProg;
+
+            drawArrow(ox, oy, ox + rx, oy + ry, C_LIME, 8, 22);
+
+            ctx.font = "900 28px 'Oswald', sans-serif";
+            ctx.fillStyle = C_DARK;
+            ctx.fillText("BİLEŞKE R = A + B", ox + rx + 15, oy + ry - 10);
+          }
+        }
+
+        // Right Side Card
+        ctx.fillStyle = C_DARK;
+        ctx.fillRect(1160, 340, 680, 520);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = C_DARK;
+        ctx.strokeRect(1160, 340, 680, 520);
+
+        ctx.fillStyle = C_CREAM;
+        ctx.font = "900 36px 'Oswald', sans-serif";
+        ctx.fillText("BİLEŞENLER VE BİRİM VEKTÖRLER", 1200, 410);
+
+        ctx.font = "400 18px 'Space Mono', monospace";
+        ctx.fillStyle = "#A3ACA0";
+        ctx.fillText("• |i| = |j| = |k| = 1 (Büyüklüğü 1 birim)", 1200, 470);
+        ctx.fillText("• A_x = A · cos(θ),   A_y = A · sin(θ)", 1200, 520);
+        ctx.fillText("• Büyüklük: R = √(R_x² + R_y²)", 1200, 570);
+        ctx.fillText("• Doğrultu: θ = arctan(R_y / R_x)", 1200, 620);
+
+        ctx.fillStyle = C_LIME;
+        ctx.fillRect(1200, 670, 600, 120);
+        ctx.fillStyle = C_DARK;
+        ctx.font = "900 34px 'Oswald', sans-serif";
+        ctx.fillText("R = (A_x + B_x) i + (A_y + B_y) j", 1230, 740);
+
+        ctx.restore();
+      }
+
+      // -------------------------------------------------------------
+      // SCENE 5 (19.5s - 24.0s): BÜYÜK FİNAL & KÂĞIT POSTER BASKISI
+      // -------------------------------------------------------------
+      if (t >= 19.2) {
+        const s5In = smoothProg(t, 19.2, 20.2);
+        ctx.save();
+        ctx.globalAlpha = s5In;
+
+        const finalScale = 0.96 + 0.04 * s5In;
+        ctx.translate(960, 540);
+        ctx.scale(finalScale, finalScale);
+        ctx.translate(-960, -540);
+
+        ctx.fillStyle = C_DARK;
+        ctx.fillRect(120, 160, 1680, 780);
+
+        drawTape(960, 160, 160, 36, 0);
+        drawTape(200, 160, 90, 28, -3);
+        drawTape(1720, 160, 90, 28, 3);
+
+        ctx.fillStyle = C_LIME;
+        ctx.font = "900 78px 'Oswald', sans-serif";
+        ctx.fillText("FİZİK 1: DOĞRUSAL HAREKET VE VEKTÖRLER", 180, 285);
+
+        ctx.font = "700 26px 'Playfair Display', serif";
+        ctx.fillStyle = C_CREAM;
+        ctx.fillText("FZM 105 • Ders Notları & Formül Mimarisi", 185, 335);
+
+        const cols = [
+          {
+            title: "01 // BOYUT & SI",
+            f: "a = v² / r",
+            sub: "[L][T]⁻² = Boyut Dengesi",
+            note1: "Tüm fiziksel formüller",
+            note2: "boyut analiziyle türetilir."
+          },
+          {
+            title: "02 // KİNEMATİK",
+            f: "v_s² = v_i² + 2aΔx",
+            sub: "x_s = x_i + v_xi·t + ½at²",
+            note1: "v ve a aynı işaretliyse hızlanır,",
+            note2: "zıt işaretliyse yavaşlar."
+          },
+          {
+            title: "03 // VEKTÖRLER",
+            f: "R = Σ A_x i + Σ A_y j",
+            sub: "R = √(R_x² + R_y²)",
+            note1: "Fiziksel nicelikler dik",
+            note2: "bileşenleriyle toplanır."
+          }
+        ];
+
+        cols.forEach((c, idx) => {
+          const cx = 180 + idx * 530;
+          ctx.fillStyle = C_CREAM;
+          ctx.fillRect(cx, 390, 480, 480);
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = C_LIME;
+          ctx.strokeRect(cx, 390, 480, 480);
+
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 28px 'Oswald', sans-serif";
+          ctx.fillText(c.title, cx + 30, 445);
+
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 36px 'Oswald', sans-serif";
+          ctx.fillText(c.f, cx + 30, 520);
+
+          ctx.font = "700 18px 'Space Mono', monospace";
+          ctx.fillStyle = C_OLIVE;
+          ctx.fillText(c.sub, cx + 30, 570);
+
+          ctx.font = "400 16px 'Space Mono', monospace";
+          ctx.fillStyle = C_DARK;
+          ctx.fillText(c.note1, cx + 30, 640);
+          ctx.fillText(c.note2, cx + 30, 670);
+
+          ctx.fillStyle = C_LIME;
+          ctx.fillRect(cx + 30, 780, 220, 45);
+          ctx.fillStyle = C_DARK;
+          ctx.font = "900 18px 'Oswald', sans-serif";
+          ctx.fillText("ONAYLANMIŞ TEORİ", cx + 50, 810);
+        });
+
+        ctx.restore();
+      }
+    };
+
+    let isPlaying = false;
+    let startTime = 0;
+    let playbackTime = 0;
+    const playBtn = document.getElementById('play-btn');
+    const timeSlider = document.getElementById('time-slider');
+    const timeDisplay = document.getElementById('time-display');
+
+    // Web Audio Sound Effects for interactive playback
+    let audioCtx = null;
+    let lastSoundTrigger = -1;
+
+    function playSfx(type) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === 'paper') {
+          const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.15, audioCtx.sampleRate);
+          const out = buf.getChannelData(0);
+          for (let i = 0; i < out.length; i++) out[i] = (Math.random() * 2 - 1) * Math.exp(-i / (out.length * 0.4));
+          const src = audioCtx.createBufferSource();
+          src.buffer = buf;
+          const flt = audioCtx.createBiquadFilter();
+          flt.type = 'bandpass';
+          flt.frequency.setValueAtTime(1200, now);
+          flt.Q.setValueAtTime(2.0, now);
+          const gn = audioCtx.createGain();
+          gn.gain.setValueAtTime(0.12, now);
+          gn.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          src.connect(flt); flt.connect(gn); gn.connect(audioCtx.destination);
+          src.start(now);
+        } else if (type === 'stamp') {
+          const osc = audioCtx.createOscillator();
+          const gn = audioCtx.createGain();
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(45, now + 0.18);
+          gn.gain.setValueAtTime(0.22, now);
+          gn.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(gn); gn.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.18);
+        } else if (type === 'snap') {
+          const osc = audioCtx.createOscillator();
+          const gn = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+          gn.gain.setValueAtTime(0.12, now);
+          gn.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gn); gn.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.08);
+        }
+      } catch (e) {}
+    }
+
+    const soundEvents = [
+      { t: 0.2, type: 'paper' },
+      { t: 2.0, type: 'stamp' },
+      { t: 4.3, type: 'paper' },
+      { t: 6.8, type: 'stamp' },
+      { t: 9.3, type: 'paper' },
+      { t: 12.0, type: 'snap' },
+      { t: 14.8, type: 'paper' },
+      { t: 17.5, type: 'snap' },
+      { t: 19.3, type: 'stamp' },
+      { t: 21.0, type: 'snap' }
+    ];
+
+    function checkSoundTriggers(currentT) {
+      soundEvents.forEach((ev, idx) => {
+        if (currentT >= ev.t && currentT < ev.t + 0.15 && lastSoundTrigger !== idx) {
+          lastSoundTrigger = idx;
+          playSfx(ev.type);
+        }
+      });
+    }
+
+    function renderLoop() {
+      if (isPlaying) {
+        const now = performance.now();
+        playbackTime = (now - startTime) / 1000;
+        if (playbackTime > DURATION) {
+          playbackTime = 0;
+          startTime = performance.now();
+          lastSoundTrigger = -1;
+        }
+        timeSlider.value = playbackTime;
+        timeDisplay.textContent = `${playbackTime.toFixed(2)}s / ${DURATION.toFixed(2)}s`;
+        window.seek(playbackTime);
+        checkSoundTriggers(playbackTime);
+        requestAnimationFrame(renderLoop);
+      }
+    }
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        startTime = performance.now() - playbackTime * 1000;
+        renderLoop();
+      }
+    });
+
+    timeSlider.addEventListener('input', (e) => {
+      isPlaying = false;
+      playbackTime = parseFloat(e.target.value);
+      timeDisplay.textContent = `${playbackTime.toFixed(2)}s / ${DURATION.toFixed(2)}s`;
+      window.seek(playbackTime);
+    });
+
+    function resize() {
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      document.getElementById('stage-container').style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.seek(0);
+  </script>
+</body>
+</html>

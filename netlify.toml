@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/sunum"
+  to = "/Fizik1_Kagit_Poster_Sunum.html"
+  status = 200
+
+[[redirects]]
+  from = "/video"
+  to = "/out/final.mp4"
+  status = 200
