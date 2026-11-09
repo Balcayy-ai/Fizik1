@@ -387,6 +387,164 @@
       box-shadow: none !important;
     }
 
+    /* ---------------- RESPONSIVE MEDIA QUERIES ---------------- */
+    .mobile-controls-row {
+      display: contents;
+    }
+    .rotate-hint {
+      display: none;
+    }
+
+    @media (max-width: 1024px) {
+      .header-badge {
+        font-size: 11px;
+        padding: 2px 6px;
+      }
+      .scene-title {
+        font-size: 12px;
+      }
+      .chapter-chips .chip {
+        padding: 3px 6px;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #player-layout {
+        height: 100vh;
+        height: 100dvh;
+      }
+      #player-header {
+        height: 44px;
+        padding: 0 8px;
+      }
+      .header-badge {
+        display: none !important;
+      }
+      .scene-title {
+        font-size: 11px;
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .scene-num {
+        font-size: 11px;
+        padding: 2px 5px;
+      }
+      .btn-back {
+        padding: 5px 8px;
+        font-size: 11px;
+        gap: 4px;
+      }
+      .btn-back span {
+        display: none;
+      }
+      .btn-back::after {
+        content: "Sunum";
+      }
+      .header-btn {
+        padding: 4px 7px;
+        font-size: 11px;
+      }
+      #sfx-text, #fs-btn span {
+        display: none;
+      }
+
+      /* Stage Area */
+      #stage-area {
+        padding: 8px;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .rotate-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(213, 250, 115, 0.12);
+        color: var(--c-lime);
+        border: 1px solid rgba(213, 250, 115, 0.3);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 10.5px;
+        font-family: 'Space Mono', monospace;
+      }
+
+      /* 2-Tier Dock on Mobile */
+      #player-dock {
+        height: 88px;
+        padding: 6px 10px 8px 10px;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 4px;
+      }
+      .dock-center {
+        width: 100%;
+        max-width: 100%;
+        order: 1;
+        gap: 0;
+      }
+      .timeline-wrap {
+        width: 100%;
+        height: 18px;
+      }
+      .chapter-chips {
+        display: none !important;
+      }
+      .mobile-controls-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        order: 2;
+      }
+      .dock-left {
+        gap: 8px;
+      }
+      .btn-play {
+        padding: 6px 12px;
+        font-size: 13px;
+        gap: 4px;
+      }
+      .time-box {
+        font-size: 11px;
+        min-width: 80px;
+      }
+      .dock-right {
+        gap: 6px;
+      }
+      .btn-speed {
+        padding: 4px 7px;
+        font-size: 11px;
+      }
+      .btn-open-slides {
+        padding: 5px 10px;
+        font-size: 12px;
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      #player-header {
+        height: 36px;
+        padding: 0 10px;
+      }
+      #player-dock {
+        height: 52px;
+        padding: 4px 10px;
+        flex-direction: row;
+      }
+      .dock-center {
+        order: 0;
+      }
+      .mobile-controls-row {
+        display: contents;
+      }
+      .rotate-hint {
+        display: none !important;
+      }
+    }
+
     /* ---------------- REMOVE NETLIFY BADGE & DRAWER ---------------- */
     iframe[src*="netlify"],
     iframe[id*="netlify"],
@@ -442,24 +600,13 @@
     </header>
 
     <main id="stage-area">
+      <div class="rotate-hint">📱 En iyi deneyim için cihazı yatay çevirin</div>
       <div id="stage-container">
         <canvas id="main-canvas" width="1920" height="1080"></canvas>
       </div>
     </main>
 
     <footer id="player-dock">
-      <div class="dock-left">
-        <button class="btn-play" id="play-btn">
-          <span id="play-icon">▶</span>
-          <span id="play-text">OYNAT</span>
-        </button>
-        <div class="time-box">
-          <span id="current-time">00.00s</span>
-          <span class="time-sep">/</span>
-          <span id="total-time">24.00s</span>
-        </div>
-      </div>
-
       <div class="dock-center">
         <div class="timeline-wrap">
           <input type="range" id="time-slider" min="0" max="24" step="0.033" value="0">
@@ -481,9 +628,23 @@
         </div>
       </div>
 
-      <div class="dock-right">
-        <button class="btn-speed" id="speed-btn" title="Oynatma Hızı">1.0x</button>
-        <a href="/" class="btn-open-slides" title="25 Slaytlık Sunumu Aç">📚 SUNUMU AÇ</a>
+      <div class="mobile-controls-row">
+        <div class="dock-left">
+          <button class="btn-play" id="play-btn">
+            <span id="play-icon">▶</span>
+            <span id="play-text">OYNAT</span>
+          </button>
+          <div class="time-box">
+            <span id="current-time">00.00s</span>
+            <span class="time-sep">/</span>
+            <span id="total-time">24.00s</span>
+          </div>
+        </div>
+
+        <div class="dock-right">
+          <button class="btn-speed" id="speed-btn" title="Oynatma Hızı">1.0x</button>
+          <a href="/" class="btn-open-slides" title="25 Slaytlık Sunumu Aç">📚 SUNUM</a>
+        </div>
       </div>
     </footer>
   </div>

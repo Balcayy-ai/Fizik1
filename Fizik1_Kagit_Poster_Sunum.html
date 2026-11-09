@@ -418,6 +418,167 @@
       }
     }
 
+    /* ---------------- RESPONSIVE MEDIA QUERIES ---------------- */
+    @media (max-width: 1024px) {
+      .slide {
+        width: min(96vw, 1050px);
+        height: min(88vh, 850px);
+        padding: 2rem 2.2rem 1.5rem 2.2rem;
+      }
+      .slide-title {
+        font-size: 2rem;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .title-slide h1 {
+        font-size: 3.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        height: 100vh;
+        height: 100dvh;
+      }
+      #presentation-container {
+        padding: 6px;
+        height: calc(100dvh - 56px);
+        width: 100vw;
+      }
+      .slide {
+        width: calc(100vw - 12px);
+        height: calc(100dvh - 68px);
+        padding: 2.2rem 0.95rem 1.25rem 0.95rem;
+        border-width: 3px;
+        border-radius: 4px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      }
+      .slide-tape {
+        font-size: 0.68rem;
+        padding: 2px 14px;
+        letter-spacing: 0.08em;
+      }
+      .slide-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+        padding-bottom: 0.45rem;
+        margin-bottom: 0.85rem;
+        border-bottom-width: 2px;
+      }
+      .slide-section-tag {
+        font-size: 0.75rem;
+      }
+      .slide-title {
+        font-size: 1.45rem;
+        line-height: 1.15;
+      }
+      .slide-subtitle {
+        font-size: 0.85rem;
+      }
+      .slide-body {
+        gap: 0.85rem;
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+      .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
+      }
+      .card {
+        padding: 0.85rem;
+      }
+      .card-title {
+        font-size: 1.05rem;
+        padding-bottom: 0.25rem;
+      }
+      .formula-stamp {
+        font-size: 1rem;
+        padding: 0.65rem 0.85rem;
+        word-break: break-word;
+      }
+      table.poster-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.78rem;
+      }
+      table.poster-table th, table.poster-table td {
+        padding: 0.45rem 0.55rem;
+        white-space: nowrap;
+      }
+
+      /* Cover Slide Mobile */
+      .title-slide {
+        padding-top: 3.2rem !important;
+        padding-bottom: 1.5rem !important;
+        justify-content: flex-start !important;
+      }
+      .title-slide .slide-tape {
+        top: 0;
+      }
+      .title-slide p:first-of-type {
+        font-size: 1.25rem !important;
+        margin-top: 0.4rem !important;
+        margin-bottom: 0.4rem !important;
+      }
+      .title-slide p:nth-of-type(2) {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+      }
+      .title-slide h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.05 !important;
+        margin-bottom: 0.65rem !important;
+      }
+      .title-slide h2 {
+        font-size: 1.15rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 1.25rem !important;
+      }
+      .title-meta-box {
+        flex-direction: column !important;
+        gap: 0.45rem !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.8rem !important;
+        text-align: center !important;
+      }
+
+      /* Mobile Navigation Bar */
+      #progress-container {
+        bottom: 52px;
+      }
+      #nav-controls {
+        height: 52px;
+        padding: 0 8px;
+        border-top-width: 2px;
+      }
+      #nav-controls > div {
+        gap: 5px !important;
+      }
+      .nav-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+      .nav-btn .btn-text {
+        display: none !important;
+      }
+      #slide-counter {
+        font-size: 12px;
+        margin: 0 3px;
+        white-space: nowrap;
+      }
+      #btn-print {
+        display: none !important; /* Hide print on mobile phones */
+      }
+    }
+
     /* ---------------- REMOVE NETLIFY BADGE & DRAWER ---------------- */
     iframe[src*="netlify"],
     iframe[id*="netlify"],
@@ -1540,16 +1701,16 @@
 
   <!-- Bottom Nav Controls -->
   <div id="nav-controls">
-    <div style="display:flex; align-items:center; gap:0.85rem;">
-      <button class="nav-btn" id="btn-prev">◀ Önceki</button>
-      <button class="nav-btn" id="btn-next">Sonraki ▶</button>
+    <div style="display:flex; align-items:center; gap:0.65rem;">
+      <button class="nav-btn" id="btn-prev">◀ <span class="btn-text">Önceki</span></button>
+      <button class="nav-btn" id="btn-next"><span class="btn-text">Sonraki</span> ▶</button>
       <span id="slide-counter">01 / 25</span>
     </div>
 
-    <div style="display:flex; align-items:center; gap:0.85rem;">
-      <a href="video.html" class="nav-btn secondary" style="text-decoration:none;" title="Motion Graphics Animasyonunu İzle">🎬 Animasyon</a>
-      <button class="nav-btn secondary" id="btn-fullscreen">⛶ Tam Ekran</button>
-      <button class="nav-btn" id="btn-print" onclick="window.print()">🖨️ PDF / Yazdır</button>
+    <div style="display:flex; align-items:center; gap:0.65rem;">
+      <a href="video.html" class="nav-btn secondary" style="text-decoration:none;" title="Motion Graphics Animasyonunu İzle">🎬 <span class="btn-text">Animasyon</span></a>
+      <button class="nav-btn secondary" id="btn-fullscreen">⛶ <span class="btn-text">Tam Ekran</span></button>
+      <button class="nav-btn" id="btn-print" onclick="window.print()">🖨️ <span class="btn-text">PDF / Yazdır</span></button>
     </div>
   </div>
 
@@ -1672,6 +1833,23 @@
     });
 
     updateSlide(false);
+
+    // Mobile Touch Swipe Navigation
+    let touchStartX = 0;
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      const diffX = e.changedTouches[0].screenX - touchStartX;
+      const diffY = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) nextSlide();
+        else prevSlide();
+      }
+    }, { passive: true });
 
     // Auto-remove Netlify badge/drawer
     (function() {
