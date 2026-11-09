@@ -3,7 +3,12 @@
 
 [[redirects]]
   from = "/sunum"
-  to = "/Fizik1_Kagit_Poster_Sunum.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/animasyon"
+  to = "/video.html"
   status = 200
 
 [[redirects]]
