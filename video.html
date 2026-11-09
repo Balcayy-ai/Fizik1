@@ -386,6 +386,31 @@
     body.headless #stage-container {
       box-shadow: none !important;
     }
+
+    /* ---------------- REMOVE NETLIFY BADGE & DRAWER ---------------- */
+    iframe[src*="netlify"],
+    iframe[id*="netlify"],
+    iframe[title*="Netlify"],
+    div[id*="netlify"],
+    div[class*="netlify"],
+    [data-netlify-badge],
+    [data-netlify-drawer],
+    netlify-drawer,
+    #netlify-badge,
+    .netlify-badge,
+    a[href*="netlify.com"][style*="fixed"],
+    a[href*="netlify.com"][style*="bottom"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: absolute !important;
+      top: -9999px !important;
+      left: -9999px !important;
+      z-index: -9999 !important;
+    }
   </style>
 </head>
 <body>
@@ -1466,6 +1491,44 @@
     // Initial render at t = 0
     window.seek(0);
     updateSceneIndicator(0);
+
+    // Auto-remove Netlify badge/drawer
+    (function() {
+      function purgeNetlifyBadge() {
+        const selectors = [
+          'iframe[src*="netlify"]',
+          'iframe[id*="netlify"]',
+          'iframe[title*="Netlify"]',
+          'div[id*="netlify"]',
+          'div[class*="netlify"]',
+          '[data-netlify-badge]',
+          '[data-netlify-drawer]',
+          'netlify-drawer',
+          '#netlify-badge',
+          '.netlify-badge'
+        ];
+        selectors.forEach(sel => {
+          document.querySelectorAll(sel).forEach(el => el.remove());
+        });
+        document.querySelectorAll('a[href*="netlify.com"]').forEach(el => {
+          const style = window.getComputedStyle(el);
+          if (style.position === 'fixed' || style.position === 'absolute') {
+            el.remove();
+          }
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', purgeNetlifyBadge);
+      } else {
+        purgeNetlifyBadge();
+      }
+      const obs = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          if (m.addedNodes.length > 0) purgeNetlifyBadge();
+        }
+      });
+      obs.observe(document.documentElement, { childList: true, subtree: true });
+    })();
   </script>
 </body>
 </html>
