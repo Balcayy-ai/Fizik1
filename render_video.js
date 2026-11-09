@@ -10,7 +10,7 @@ async function render() {
   }
 
   const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-  const htmlPath = 'file:///' + path.join(__dirname, 'index.html').replace(/\\/g, '/') + '?headless=1';
+  const htmlPath = 'file:///' + path.join(__dirname, 'video.html').replace(/\\/g, '/') + '?headless=1';
 
   console.log('Launching headless Chrome...');
   const browser = await puppeteer.launch({
@@ -21,7 +21,7 @@ async function render() {
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
-  console.log('Loading index.html...');
+  console.log('Loading video.html...');
   await page.goto(htmlPath, { waitUntil: 'networkidle0' });
 
   // Wait for Google fonts to load
