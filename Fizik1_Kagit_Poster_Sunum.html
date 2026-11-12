@@ -626,8 +626,8 @@
       <h1>FİZİK 1: MEKANİK</h1>
       <h2>Tek Boyutta Doğrusal Hareket ve Vektörler</h2>
       <div class="title-meta-box">
-        <div><strong>KAPSAM:</strong> Fizik & Ölçüm, Kinematik, Vektör Cebiri</div>
-        <div><strong>FORMAT:</strong> Kâğıt Poster Stüdyo Tasarımı (32 Slayt)</div>
+        <div><strong>KAPSAM:</strong> Fizik & Ölçüm, Kinematik, Vektör Cebiri, Vize Soru Bankası</div>
+        <div><strong>FORMAT:</strong> Kâğıt Poster Stüdyo Tasarımı (37 Slayt)</div>
       </div>
     </div>
 
@@ -638,7 +638,7 @@
         <div>
           <div class="slide-section-tag">00 // GENEL BAKIŞ</div>
           <h2 class="slide-title">KONU MİMARİSİ VE ÇALIŞMA HARİTASI</h2>
-          <div class="slide-subtitle">Tüm teori, boyut analizi türetimleri, kinematik ve vektör cebiri</div>
+          <div class="slide-subtitle">Tüm teori, boyut analizi türetimleri, kinematik, vektörler ve 10 vize çalışma sorusu</div>
         </div>
       </div>
       <div class="slide-body">
@@ -678,14 +678,17 @@
           </div>
 
           <div class="card dark">
-            <div class="card-title">04 // VEKTÖR CEBİRİ & ÇARPIM İŞLEMLERİ</div>
-            <ul class="poster-list">
-              <li>Skaler vs Vektörel Ayrımı & Geometrik Özellikler</li>
-              <li>Kartezyen Dik Bileşenler ve 4 Bölge Açı Kontrolü</li>
-              <li>Birim Vektörler ($\hat{i}, \hat{j}, \hat{k}$) & Analitik Toplama</li>
-              <li>Skaler (Nokta) Çarpım: İzdüşüm, Bileşenler & Açı Hesabı</li>
-              <li>Vektörel (Çapraz) Çarpım: Sağ El Kuralı & $3\times3$ Determinant</li>
-              <li>Büyük Formül Özeti ve Sınav Başarı Stratejisi</li>
+            <div class="card-title">04 // VEKTÖRLER & VİZE ÇALIŞMA SORULARI</div>
+            <ul class="poster-list" style="font-size:0.88rem; line-height:1.45;">
+              <li>Skaler vs Vektörel Ayrımı, Dik Bileşenler & Birim Vektörler</li>
+              <li>Skaler & Vektörel Çarpım ($3\times3$ Determinant Matrisi)</li>
+              <li>Büyük Formül Tablosu & Sınav Başarı Stratejisi</li>
+              <li><strong>VİZE ÇALIŞMA SORULARI (10 Detaylı Çözüm):</strong></li>
+              <li>• Soru 1-2: Anlamlı Sayılar & Hassasiyet</li>
+              <li>• Soru 3-4: Kepler 3. Yasası & Periyot Oranı</li>
+              <li>• Soru 5-6: Düşey Atış & Yüksekten Atış</li>
+              <li>• Soru 7-8: İvmeli Asansörde Düşen Vida</li>
+              <li>• Soru 9-10: Vektör Çarpımları & Alan Hesabı</li>
             </ul>
           </div>
         </div>
@@ -2014,13 +2017,294 @@
       </div>
     </div>
 
-    <!-- SLIDE 32: Kapanış -->
+    <!-- SLIDE 32: Vize Çalışma Soruları 1: Anlamlı Sayılar -->
+    <div class="slide" data-title="Vize Soru 1: Anlamlı Sayılar">
+      <div class="slide-tape">VİZE ÇALIŞMA 1</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">06.1 // VİZE SORU BANKASI</div>
+          <h2 class="slide-title">ÇALIŞMA SORULARI: ANLAMLI SAYILAR VE DUYARLILIK</h2>
+          <div class="slide-subtitle">Sınav Soru Tipi 1: Çok adımlı işlemlerde anlamlı basamak kuralları ve yuvarlama</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">SORU 1: YOĞUNLUK & ÇARPMA KURALI</div>
+            <p style="font-size:0.86rem;"><strong>Soru:</strong> Bir bloğun kenarları cetvelle ölçülmüştür:<br>
+            $a = 14.2\text{ cm}, \quad b = 8.65\text{ cm}, \quad c = 0.540\text{ cm}$.<br>
+            Kütlesi $m = 485.6\text{ g}$ tartılmıştır. Bloğun yoğunluğunu ($\rho = \frac{m}{a \cdot b \cdot c}$) anlamlı basamak kuralına göre hesaplayınız.</p>
+            <div style="font-size:0.83rem; color:#D2D8CF; margin-top:0.35rem; line-height:1.4;">
+              <strong>1. Hacim ($V = a \cdot b \cdot c$):</strong><br>
+              Her üç çarpan da <strong>3 anlamlı basamağa (3 AB)</strong> sahiptir:<br>
+              $V = 14.2 \times 8.65 \times 0.540 = 66.3282\text{ cm}^3 \implies \mathbf{66.3\text{ cm}^3}$ (3 AB)
+            </div>
+            <div style="font-size:0.83rem; color:#D2D8CF; margin-top:0.3rem; line-height:1.4;">
+              <strong>2. Yoğunluk Bölme Kuralı ($\rho = m/V$):</strong><br>
+              $m = 485.6\text{ g}$ (4 AB), $V$ ise 3 AB ile sınırlıdır. Çarpma/bölmede sonuç en az AB sayısına (3 AB) yuvarlanır:
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:1.05rem; padding:0.4rem 0.7rem; margin:0.35rem 0;">
+              $$\rho = \frac{485.6}{66.3282} = 7.32116... \implies \mathbf{7.32\text{ g/cm}^3}\ (3\text{ AB})$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-lime); margin-top:0.25rem;">*Sınav Notu: Ara işlemlerde yuvarlama hatasını önlemek için ham sayı tutulur, son basamakta 3 AB'ye yuvarlanır.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">SORU 2: KARIŞIK TOPLAMA & BÖLME</div>
+            <p style="font-size:0.86rem;"><strong>Soru:</strong> Deneyde hareketlinin yer değiştirmesi ve süresi:<br>
+            $x_1 = 125.8\text{ m}, \quad x_2 = 42.36\text{ m}, \quad x_0 = 0.85\text{ m}$<br>
+            ve geçen süre $t = 12.0\text{ s}$ ölçülmüştür. $v = \frac{(x_1 - x_2) + x_0}{t}$ sonucunu anlamlı basamak kurallarına göre bulunuz.</p>
+            <div style="font-size:0.83rem; margin-top:0.35rem; line-height:1.4;">
+              <strong>1. Pay: Toplama/Çıkarma (En az ondalık hane):</strong><br>
+              $125.8$ (1 ondalık), $42.36$ ve $0.85$ (2 ondalık).<br>
+              $\Delta x = 125.8 - 42.36 + 0.85 = 84.29\text{ m}$.<br>
+              En az ondalığa göre virgülden sonra 1 basamak alınır: $\mathbf{84.3\text{ m}}$ (3 AB).
+            </div>
+            <div style="font-size:0.83rem; margin-top:0.3rem; line-height:1.4;">
+              <strong>2. Bölme: $\Delta x / t$ (En az anlamlı basamak):</strong><br>
+              Pay $\Delta x$ (3 AB), Payda $t = 12.0\text{ s}$ (3 AB).
+            </div>
+            <div class="formula-stamp" style="font-size:1.05rem; padding:0.4rem 0.7rem; margin:0.35rem 0;">
+              $$v = \frac{84.29\text{ m}}{12.0\text{ s}} \approx 7.02416... \implies \mathbf{7.02\text{ m/s}}\ (3\text{ AB})$$
+            </div>
+            <div class="stamp-note" style="margin-top:0.25rem; padding:0.35rem 0.6rem; font-size:0.8rem;">
+              <strong>Kural Özeti:</strong> Toplama/çıkarmada <em>ondalık hane</em>, çarpma/bölmede <em>toplam anlamlı basamak</em> belirleyicidir.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 33: Vize Çalışma Soruları 2: Kepler Yasası -->
+    <div class="slide" data-title="Vize Soru 2: Kepler Yasası">
+      <div class="slide-tape">VİZE ÇALIŞMA 2</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">06.2 // VİZE SORU BANKASI</div>
+          <h2 class="slide-title">ÇALIŞMA SORULARI: KEPLER 3. YASASI VE BOYUT ANALİZİ</h2>
+          <div class="slide-subtitle">Sınav Soru Tipi 2: Dolanma periyodu boyutsal türetimi ve yörünge yarıçapı oranı</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">SORU 3: KEPLER 3. YASASI BOYUT TÜRETİMİ</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> Gezegenin dolanma periyodu $T$'nin; yarıçap $r$, Güneş kütlesi $M$ ve çekim sabiti $G$'ye bağlı olduğu biliniyor ($T = k \cdot r^a M^b G^c$). Boyut analiziyle $a, b, c$ üslerini bularak $T^2 \propto r^3$ olduğunu ispatlayınız. ($[G] = [L]^3 [M]^{-1} [T]^{-2}$).</p>
+            <div style="font-size:0.82rem; margin-top:0.3rem; line-height:1.35;">
+              <strong>1. Boyut Eşitliği:</strong><br>
+              $[T]^1 [L]^0 [M]^0 = [L]^a [M]^b ([L]^3 [M]^{-1} [T]^{-2})^c = [L]^{a+3c} [M]^{b-c} [T]^{-2c}$
+            </div>
+            <div style="font-size:0.82rem; margin-top:0.25rem; line-height:1.35;">
+              <strong>2. Üs Eşitleme:</strong><br>
+              $[T]: -2c = 1 \implies \mathbf{c = -1/2}$<br>
+              $[M]: b - c = 0 \implies \mathbf{b = -1/2}$<br>
+              $[L]: a + 3c = 0 \implies \mathbf{a = 3/2}$
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:1rem; padding:0.4rem 0.7rem; margin:0.35rem 0;">
+              $$T = k \frac{r^{3/2}}{\sqrt{GM}} \implies \mathbf{T^2 = \frac{k^2}{GM} r^3 \implies T^2 \propto r^3}$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-olive); margin-top:0.2rem;">Sonuç: Dolanma periyodunun karesi, yörünge yarıçapının küpüyle doğru orantılıdır.</p>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">SORU 4: GEZEGEN YÖRÜNGE VE PERİYOT ORANI</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> Dünya için $r_D = 1.0\text{ AU}$ ve $T_D = 1.0\text{ yıl}$'dır.<br>
+            a) Periyodu $T_X = 8.0\text{ yıl}$ olan gezegenin Güneş'e uzaklığı $r_X$ kaç $\text{AU}$'dur?<br>
+            b) Uzaklığı $r_Y = 9.0\text{ AU}$ olan asteroidin periyodu kaç yıldır?</p>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.3rem; line-height:1.35;">
+              <strong>1. a Şıkkı ($T^2 / r^3 = \text{sabit}$ orantısıyla):</strong>
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$\frac{T_X^2}{r_X^3} = \frac{T_D^2}{r_D^3} \implies r_X^3 = (1.0)^3(8.0)^2 = 64 \implies \mathbf{r_X = 4.0\text{ AU}}$$
+            </div>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.25rem;">
+              <strong>2. b Şıkkı ($r_Y = 9.0\text{ AU}$ için periyot):</strong>
+            </div>
+            <div class="formula-stamp" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$T_Y^2 = (9.0)^3 = 729 \implies \mathbf{T_Y = \sqrt{729} = 27.0\text{ yıl}}$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-lime); margin-top:0.2rem;">*Pratik İpucu: $r_Y^{3/2} = (\sqrt{9.0})^3 = 3^3 = 27.0\text{ yıl}$.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 34: Vize Çalışma Soruları 3: Atışlar -->
+    <div class="slide" data-title="Vize Soru 3: Atış Hareketleri">
+      <div class="slide-tape">VİZE ÇALIŞMA 3</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">06.3 // VİZE SORU BANKASI</div>
+          <h2 class="slide-title">ÇALIŞMA SORULARI: SERBEST DÜŞME VE DÜŞEY ATIŞ</h2>
+          <div class="slide-subtitle">Sınav Soru Tipi 3: Maksimum yükseklik, uçuş süresi ve zamansız hız bağıntıları</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">SORU 5: YERDEN YUKARI DÜŞEY ATIŞ</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> Yerden yukarı doğru $v_0 = 29.4\text{ m/s}$ ilk hızla düşey atılan taş için ($g = 9.80\text{ m/s}^2$):<br>
+            a) Maksimum çıkış yüksekliği $h_{max}$ nedir?<br>
+            b) Tepe noktasına varış ve toplam havada kalma süresi nedir?<br>
+            c) $t = 2.0\text{ s}$ anındaki hızını ve yüksekliğini bulunuz.</p>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.3rem; line-height:1.35;">
+              <strong>1. Maksimum Yükseklik & Süre:</strong><br>
+              $h_{max} = \frac{v_0^2}{2g} = \frac{(29.4)^2}{19.6} = \mathbf{44.1\text{ m}}$<br>
+              $t_{\text{çıkış}} = \frac{v_0}{g} = \mathbf{3.0\text{ s}}, \quad t_{\text{uçuş}} = 2 \times 3.0 = \mathbf{6.0\text{ s}}$
+            </div>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.25rem;">
+              <strong>2. $t = 2.0\text{ s}$ Anındaki Hız ve Konum:</strong>
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$v(2) = 29.4 - (9.8)(2) = \mathbf{+9.8\text{ m/s}\ (\uparrow)}$$
+              $$y(2) = 29.4(2) - \tfrac{1}{2}(9.8)(4) = \mathbf{39.2\text{ m}}$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-lime); margin-top:0.2rem;">*Yorum: $t=2\text{ s}$'de hız pozitif olduğundan cisim hâlâ yukarı çıkmaktadır.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">SORU 6: YÜKSEKTEN YUKARI ATILAN CİSİM</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> $h_0 = 45.0\text{ m}$ yüksekliğindeki kuleden yukarı doğru $v_0 = 20.0\text{ m/s}$ hızla atılan taş yere düşüyor ($g = 10.0\text{ m/s}^2$).<br>
+            a) Taş yere kaç saniyede çarpar?<br>
+            b) Yere çarpma hızı $v_{son}$ nedir?</p>
+            <div style="font-size:0.82rem; margin-top:0.3rem; line-height:1.35;">
+              <strong>1. Konum Denklemi ($y=0$ zemin):</strong><br>
+              $0 = 45 + 20t - 5t^2 \implies t^2 - 4t - 9 = 0$
+            </div>
+            <div class="formula-stamp" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$t = \frac{4 + \sqrt{16 + 36}}{2} = \frac{4 + \sqrt{52}}{2} \approx \mathbf{5.61\text{ s}}$$
+            </div>
+            <div style="font-size:0.82rem; margin-top:0.25rem;">
+              <strong>2. Yere Çarpma Hızı (Zamansız Formül):</strong>
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$v_s = -\sqrt{v_0^2 + 2gh_0} = -\sqrt{400 + 900} \approx \mathbf{-36.1\text{ m/s}}$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-olive); margin-top:0.2rem;">Hız eksi çıkar çünkü cisim aşağı yönde çarpmaktadır.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 35: Vize Çalışma Soruları 4: Asansör Problemi -->
+    <div class="slide" data-title="Vize Soru 4: İvmeli Asansör">
+      <div class="slide-tape">VİZE ÇALIŞMA 4</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">06.4 // VİZE SORU BANKASI</div>
+          <h2 class="slide-title">ÇALIŞMA SORULARI: İVMELİ ASANSÖR VE GÖRECELİ HAREKET</h2>
+          <div class="slide-subtitle">Sınav Soru Tipi 4: İvmeli sistemde serbest kalan cisim, çarpışma süresi ve hızlar</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">SORU 7: YUKARI YAVAŞLAYAN ASANSÖR</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> Asansör yukarı $v_i = 12.0\text{ m/s}$ ile çıkarken $a = 2.0\text{ m/s}^2$ ivmeyle <strong>yavaşlamaktadır</strong>. Tavandan ($h = 2.45\text{ m}$) bir vida kopuyor ($g = 9.80\text{ m/s}^2$).<br>
+            a) Çarpma süresi $t$ nedir? &nbsp; b) Son hızlar nedir?</p>
+            <div style="font-size:0.82rem; margin-top:0.3rem; line-height:1.35;">
+              <strong>1. Konum Eşitleme ($y_{as} = y_{vida}$):</strong><br>
+              $12t - t^2 = 2.45 + 12t - 4.9t^2 \implies 3.9t^2 = 2.45$
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:1.02rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$t = \sqrt{2.45 / 3.9} \approx \mathbf{0.793\text{ s}}$$
+            </div>
+            <div style="font-size:0.82rem; margin-top:0.25rem;">
+              <strong>2. Çarpma Hızları ($v = v_i + at$):</strong>
+            </div>
+            <div class="formula-stamp" style="font-size:0.92rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$v_{as} = 12 - (2.0)(0.793) \approx \mathbf{+10.41\text{ m/s}\ (\uparrow)}$$
+              $$v_{vida} = 12 - (9.80)(0.793) \approx \mathbf{+4.23\text{ m/s}\ (\uparrow)}$$
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">SORU 8: AŞAĞI HIZLANAN ASANSÖR (BAĞIL İVME)</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> Durgunluktan aşağı $a = 3.0\text{ m/s}^2$ ivmeyle inmeye başlayan asansörün tavanından ($h = 2.70\text{ m}$) bir vida serbest kalıyor ($g = 9.80\text{ m/s}^2$). Çarpma süresini bulunuz.</p>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.3rem; line-height:1.35;">
+              <strong>1. Asansör İçi Bağıl İvme Metodu:</strong><br>
+              Asansör aşağı hızlandığı için eylemsizlik yerçekimini hafifletir:
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$a_{\text{bağıl}} = g - a_{as} = 9.80 - 3.00 = \mathbf{6.80\text{ m/s}^2}$$
+            </div>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.25rem;">
+              <strong>2. Düşme Süresi ($h = \tfrac{1}{2} a_{\text{bağıl}} t^2$):</strong>
+            </div>
+            <div class="formula-stamp" style="font-size:1.02rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$2.70 = \tfrac{1}{2}(6.80)t^2 \implies \mathbf{t = \sqrt{\frac{2.70}{3.40}} \approx 0.891\text{ s}}$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-lime); margin-top:0.2rem;">*Altın Kural: Yukarı hızlanmada $g_{eff} = g+a$, aşağı hızlanmada $g_{eff} = g-a$.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 36: Vize Çalışma Soruları 5: Vektörler -->
+    <div class="slide" data-title="Vize Soru 5: Vektörler">
+      <div class="slide-tape">VİZE ÇALIŞMA 5</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">06.5 // VİZE SORU BANKASI</div>
+          <h2 class="slide-title">ÇALIŞMA SORULARI: SKALER VE VEKTÖREL ÇARPIM</h2>
+          <div class="slide-subtitle">Sınav Soru Tipi 5: Nokta çarpımla diklik ve açı hesabı, 3x3 çapraz çarpım determinantı</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">SORU 9: SKALER ÇARPIM & AÇI HESABI</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> $\vec{A} = 2\hat{i} + 3\hat{j} - \hat{k}$ ve $\vec{B} = -\hat{i} + 2\hat{j} + 4\hat{k}$ veriliyor.<br>
+            a) $\vec{A}\cdot\vec{B}$ skaler çarpımını bulunuz.<br>
+            b) Büyüklükleri ve aralarındaki $\phi$ açısını bulunuz.</p>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.3rem;">
+              <strong>1. Skaler Çarpım:</strong>
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$\vec{A}\cdot\vec{B} = (2)(-1) + (3)(2) + (-1)(4) = -2 + 6 - 4 = \mathbf{0}$$
+            </div>
+            <div style="font-size:0.82rem; color:#D2D8CF; margin-top:0.25rem;">
+              <strong>2. Büyüklükler & Açı:</strong><br>
+              $A = \sqrt{4+9+1} = \mathbf{\sqrt{14}}, \quad B = \sqrt{1+4+16} = \mathbf{\sqrt{21}}$
+            </div>
+            <div class="formula-stamp" style="font-size:0.95rem; padding:0.35rem 0.65rem; margin:0.3rem 0;">
+              $$\cos\phi = \frac{\vec{A}\cdot\vec{B}}{AB} = 0 \implies \mathbf{\phi = 90^\circ \implies \vec{A} \perp \vec{B}}$$
+            </div>
+            <p style="font-size:0.78rem; color:var(--c-lime); margin-top:0.2rem;">Skaler çarpım $0$ olduğundan bu iki vektör birbirine <strong>tam diktir</strong>.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">SORU 10: VEKTÖREL ÇARPIM & ALAN</div>
+            <p style="font-size:0.85rem;"><strong>Soru:</strong> $\vec{A} = 3\hat{i} - \hat{j} + 2\hat{k}$ ve $\vec{B} = \hat{i} + 2\hat{j} - \hat{k}$ veriliyor.<br>
+            a) $3\times3$ determinantla $\vec{C} = \vec{A} \times \vec{B}$ vektörünü bulunuz.<br>
+            b) İki vektörün oluşturduğu paralelkenarın alanını bulunuz.</p>
+            <div style="font-size:0.82rem; margin-top:0.25rem;">
+              <strong>1. Determinant Yöntemi:</strong>
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.9rem; padding:0.3rem 0.6rem; margin:0.25rem 0;">
+              $$\vec{C} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ 3 & -1 & 2 \\ 1 & 2 & -1 \end{vmatrix} = \mathbf{-3\hat{i} + 5\hat{j} + 7\hat{k}}$$
+            </div>
+            <div style="font-size:0.82rem; margin-top:0.2rem;">
+              <strong>2. Paralelkenarın Alanı ($Alan = |\vec{A}\times\vec{B}|$):</strong>
+            </div>
+            <div class="formula-stamp" style="font-size:0.92rem; padding:0.3rem 0.6rem; margin:0.25rem 0;">
+              $$Alan = \sqrt{(-3)^2 + 5^2 + 7^2} = \sqrt{83} \approx \mathbf{9.11\text{ birim}^2}$$
+            </div>
+            <div class="stamp-note" style="margin-top:0.2rem; padding:0.25rem 0.5rem; font-size:0.78rem;">
+              <strong>İpucu:</strong> Üçgenin alanı sorulsaydı: $\text{Alan}/2 \approx 4.56$ olurdu.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 37: Kapanış -->
     <div class="slide title-slide" data-title="Kapanış">
       <div class="slide-tape">FİNAL</div>
       <h1>BAŞARILAR!</h1>
-      <h2>Fizik 1 (FZM 105) Çalışma Kılavuzu Tamamlandı</h2>
+      <h2>Fizik 1 (FZM 105) Vize Hazırlık ve Çalışma Kılavuzu Tamamlandı</h2>
       <div class="title-meta-box">
-        <div>Kâğıt Poster Estetiğinde 32 Slaytlık Sunum ve Motion Graphics Paketi</div>
+        <div>Kâğıt Poster Estetiğinde 37 Slaytlık Sunum & 10 Soruluk Vize Soru Bankası</div>
       </div>
     </div>
 
@@ -2031,7 +2315,7 @@
     <div style="display:flex; align-items:center; gap:0.65rem;">
       <button class="nav-btn" id="btn-prev">◀ <span class="btn-text">Önceki</span></button>
       <button class="nav-btn" id="btn-next"><span class="btn-text">Sonraki</span> ▶</button>
-      <span id="slide-counter">01 / 32</span>
+      <span id="slide-counter">01 / 37</span>
     </div>
 
     <div style="display:flex; align-items:center; gap:0.65rem;">
