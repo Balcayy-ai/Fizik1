@@ -253,6 +253,11 @@
       text-align: left;
       border: 1px solid var(--c-dark);
     }
+    table.poster-table.compact th, table.poster-table.compact td {
+      padding: 0.22rem 0.65rem;
+      font-size: 0.85rem;
+      line-height: 1.25;
+    }
     table.poster-table th {
       background: var(--c-dark);
       color: var(--c-cream);
@@ -622,7 +627,7 @@
       <h2>Tek Boyutta Doğrusal Hareket ve Vektörler</h2>
       <div class="title-meta-box">
         <div><strong>KAPSAM:</strong> Fizik & Ölçüm, Kinematik, Vektör Cebiri</div>
-        <div><strong>FORMAT:</strong> Kâğıt Poster Stüdyo Tasarımı</div>
+        <div><strong>FORMAT:</strong> Kâğıt Poster Stüdyo Tasarımı (32 Slayt)</div>
       </div>
     </div>
 
@@ -662,20 +667,24 @@
           </div>
 
           <div class="card">
-            <div class="card-title">03 // DERS İÇİ PROBLEMLER</div>
+            <div class="card-title">03 // DERS İÇİ PROBLEMLER & KİNEMATİK</div>
             <ul class="poster-list">
               <li>Örnek 1: Çıta ve Ceylan ($x = 20 + 5t^2$ Türev Analizi)</li>
               <li>Örnek 2: Araba Frenleme Mesafesi ve Süresi</li>
               <li>Örnek 3: Polis Kovalama (Yakalama & Maksimum Mesafe)</li>
+              <li>Tahta Problemi 1: Hızlanan Asansörde Düşen Vida</li>
+              <li>Tahta Problemi 2: Rüzgârda Uçak (2B Bağıl Hız)</li>
             </ul>
           </div>
 
           <div class="card dark">
-            <div class="card-title">04 // VEKTÖRLER VE ÖZET TABLOLAR</div>
+            <div class="card-title">04 // VEKTÖR CEBİRİ & ÇARPIM İŞLEMLERİ</div>
             <ul class="poster-list">
               <li>Skaler vs Vektörel Ayrımı & Geometrik Özellikler</li>
               <li>Kartezyen Dik Bileşenler ve 4 Bölge Açı Kontrolü</li>
               <li>Birim Vektörler ($\hat{i}, \hat{j}, \hat{k}$) & Analitik Toplama</li>
+              <li>Skaler (Nokta) Çarpım: İzdüşüm, Bileşenler & Açı Hesabı</li>
+              <li>Vektörel (Çapraz) Çarpım: Sağ El Kuralı & $3\times3$ Determinant</li>
               <li>Büyük Formül Özeti ve Sınav Başarı Stratejisi</li>
             </ul>
           </div>
@@ -986,7 +995,7 @@
         </div>
       </div>
       <div class="slide-body">
-        <table class="poster-table">
+        <table class="poster-table compact">
           <thead>
             <tr>
               <th>Büyüklük</th>
@@ -1114,7 +1123,7 @@
         </div>
       </div>
       <div class="slide-body">
-        <table class="poster-table">
+        <table class="poster-table compact">
           <thead>
             <tr>
               <th>Hız ($v$)</th>
@@ -1168,7 +1177,7 @@
         </div>
       </div>
       <div class="slide-body">
-        <table class="poster-table">
+        <table class="poster-table compact">
           <thead>
             <tr>
               <th>Denklem Adı</th>
@@ -1574,7 +1583,315 @@
       </div>
     </div>
 
-    <!-- SLIDE 23: Büyük Özet Formül Tablosu -->
+    <!-- SLIDE 23: Skaler (Nokta) Çarpım: Tanım ve Geometrik İzdüşüm -->
+    <div class="slide" data-title="Skaler Çarpım: Tanım ve İzdüşüm">
+      <div class="slide-tape">SKALER ÇARPIM</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.5 // VEKTÖR CEBİRİ</div>
+          <h2 class="slide-title">SKALER (NOKTA) ÇARPIM: TANIM VE GEOMETRİK İZDÜŞÜM</h2>
+          <div class="slide-subtitle">İki vektörün skaler çarpımı, izdüşüm mantığı ve birim vektör kuralları</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">MATEMATİKSEL TANIM VE ÖZELLİKLER</div>
+            <p>İki vektörün skaler (nokta) çarpımı, büyüklükleri ve aralarındaki açının kosinüsü çarpımıdır:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.25rem;">
+              $$\vec{A} \cdot \vec{B} = AB\cos\phi = |\vec{A}||\vec{B}|\cos\phi$$
+            </div>
+            <ul class="poster-list" style="margin-top:0.75rem;">
+              <li><strong>$\phi$ Açısı:</strong> İki vektör arasındaki açı ($0^\circ \le \phi \le 180^\circ$).</li>
+              <li><strong>Skaler Sonuç:</strong> Çarpımın sonucu bir yöne sahip değildir, saf bir skalerdir (sayıdır).</li>
+              <li><strong>Değişme Özelliği (Komütatif):</strong> $\vec{A} \cdot \vec{B} = \vec{B} \cdot \vec{A}$</li>
+              <li><strong>Açıya Göre İşaret:</strong> $\phi < 90^\circ \implies >0$, $\phi > 90^\circ \implies <0$, $\phi = 90^\circ \implies 0$.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">GEOMETRİK İZDÜŞÜM & BİRİM VEKTÖRLER</div>
+            <p><strong>Geometrik Anlam:</strong> Vektörlerden birinin, diğerinin doğrultusu üzerindeki izdüşümüyle çarpımıdır:</p>
+            <div class="formula-stamp" style="font-size:1.05rem;">
+              $$\vec{A}\cdot\vec{B} = A\,(B\cos\phi) = B\,(A\cos\phi)$$
+            </div>
+            <p style="margin-top:0.75rem;"><strong>Birim Vektörlerin Nokta Çarpımı:</strong></p>
+            <div class="formula-stamp lime-bg" style="font-size:1.05rem;">
+              $$\hat{i}\cdot\hat{i} = \hat{j}\cdot\hat{j} = \hat{k}\cdot\hat{k} = (1)(1)\cos 0^\circ = \mathbf{1}$$
+              $$\hat{i}\cdot\hat{j} = \hat{i}\cdot\hat{k} = \hat{j}\cdot\hat{k} = (1)(1)\cos 90^\circ = \mathbf{0}$$
+            </div>
+            <p style="font-size:0.85rem; color:var(--c-olive); margin-top:0.5rem;">Aynı eksendeki birim vektörler $1$, birbirine dik olanlar $0$ üretir.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 24: Skaler Çarpım: Bileşenlerle Hesap ve Açı -->
+    <div class="slide" data-title="Skaler Çarpım: Bileşenler ve Açı">
+      <div class="slide-tape">BİLEŞENLERLE ÇARPIM</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.5 // ANALİTİK HESAP</div>
+          <h2 class="slide-title">SKALER ÇARPIM: BİLEŞENLER VE AÇI HESABI</h2>
+          <div class="slide-subtitle">Analitik bileşenlerle çarpım açılımı, iki vektör arasındaki açı ve diklik şartı</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">BİLEŞENLERLE SKALER ÇARPIM</div>
+            <p>$\vec{A}$ ve $\vec{B}$ vektörleri bileşenlerine ayrıldığında:</p>
+            <p>$$\vec{A} = A_x\hat{i} + A_y\hat{j} + A_z\hat{k}, \quad \vec{B} = B_x\hat{i} + B_y\hat{j} + B_z\hat{k}$$</p>
+            <p>Dağılma uygulandığında dik terimler ($\hat{i}\cdot\hat{j}=0$) yok olur:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.25rem;">
+              $$\vec{A}\cdot\vec{B} = A_x B_x + A_y B_y + A_z B_z$$
+            </div>
+            <div class="stamp-note" style="margin-top:0.75rem;">
+              <strong>Kural:</strong> İki vektörün skaler çarpımı, karşılıklı bileşenlerinin çarpımlarının cebirsel toplamına eşittir.
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">ARADAKİ AÇI VE DİKLİK ŞARTI</div>
+            <p>Bileşenleri bilinen iki vektör arasındaki açı $\phi$ doğrudan bulunur:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.1rem;">
+              $$\cos\phi = \frac{\vec{A}\cdot\vec{B}}{AB} = \frac{A_x B_x + A_y B_y + A_z B_z}{\sqrt{A_x^2+A_y^2+A_z^2}\sqrt{B_x^2+B_y^2+B_z^2}}$$
+            </div>
+            <div class="card-title" style="margin-top:1rem;">KRİTİK DİKLİK TESTİ</div>
+            <div class="formula-stamp" style="font-size:1.1rem;">
+              $$\vec{A} \perp \vec{B} \iff \vec{A}\cdot\vec{B} = 0 \iff A_x B_x + A_y B_y + A_z B_z = 0$$
+            </div>
+            <p style="font-size:0.85rem; margin-top:0.5rem;">Sıfırdan farklı iki vektörün skaler çarpımı $0$ ise, bu iki vektör <strong>kesinlikle birbirine diktir</strong> ($\cos 90^\circ = 0$).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 25: Vektörel (Çapraz) Çarpım: Tanım ve Sağ El Kuralı -->
+    <div class="slide" data-title="Vektörel Çarpım: Tanım ve Sağ El Kuralı">
+      <div class="slide-tape">VEKTÖREL ÇARPIM</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.6 // VEKTÖR CEBİRİ</div>
+          <h2 class="slide-title">VEKTÖREL (ÇAPRAZ) ÇARPIM: TANIM VE SAĞ EL KURALI</h2>
+          <div class="slide-subtitle">İki vektörden yeni bir dik vektör üretimi, büyüklük, yön ve döngüsel kural</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">TANIM VE BÜYÜKLÜK</div>
+            <p style="font-size:0.92rem;">İki vektörün vektörel çarpımı yeni bir $\vec{C}$ vektörü üretir:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.15rem; padding:0.55rem 1rem; margin:0.4rem 0;">
+              $$\vec{C} = \vec{A} \times \vec{B} \quad \implies \quad C = AB\sin\theta$$
+            </div>
+            <ul class="poster-list" style="margin-top:0.6rem; font-size:0.9rem; line-height:1.45;">
+              <li><strong>Vektörel Sonuç:</strong> Hem şiddeti hem uzayda 3B yönü vardır.</li>
+              <li><strong>Düzleme Diklik:</strong> $\vec{C}$ vektörü, hem $\vec{A}$'ya hem de $\vec{B}$'ye daima DİKTİR ($\vec{C} \perp \vec{A}$ ve $\vec{C} \perp \vec{B}$).</li>
+              <li><strong>Anti-Komütatif (Ters Değişme):</strong><br>
+                $\vec{A} \times \vec{B} = -(\vec{B} \times \vec{A})$. Sıra değiştiğinde yön $180^\circ$ tersine döner!</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">SAĞ EL KURALI & BİRİM VEKTÖRLER</div>
+            <p style="font-size:0.9rem;"><strong>Sağ El Kuralı:</strong> 4 parmak $\vec{A}$'dan $\vec{B}$'ye kıvrıldığında, baş parmak $\vec{C} = \vec{A}\times\vec{B}$ yönünü gösterir.</p>
+            <div class="formula-stamp" style="font-size:0.95rem; padding:0.4rem 0.8rem; margin:0.4rem 0;">
+              $$\hat{i}\times\hat{i} = \hat{j}\times\hat{j} = \hat{k}\times\hat{k} = \mathbf{0} \quad (\sin 0^\circ = 0)$$
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.45rem 0.8rem; margin:0.4rem 0;">
+              $$\hat{i}\times\hat{j} = \hat{k}, \quad \hat{j}\times\hat{k} = \hat{i}, \quad \hat{k}\times\hat{i} = \hat{j}$$
+              $$\hat{j}\times\hat{i} = -\hat{k}, \quad \hat{k}\times\hat{j} = -\hat{i}, \quad \hat{i}\times\hat{k} = -\hat{j}$$
+            </div>
+            <p style="font-size:0.83rem; color:var(--c-olive); margin-top:0.35rem;">Saat döngüsünde ($\hat{i} \to \hat{j} \to \hat{k} \to \hat{i}$) pozitif, ters yönde negatiftir.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 26: Vektörel Çarpım: Bileşenler ve Determinant Yöntemi -->
+    <div class="slide" data-title="Vektörel Çarpım: Bileşenler ve Determinant">
+      <div class="slide-tape">DETERMİNANT YÖNTEMİ</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.6 // ANALİTİK HESAP</div>
+          <h2 class="slide-title">VEKTÖREL ÇARPIM: BİLEŞENLER VE DETERMINANT</h2>
+          <div class="slide-subtitle">Kartezyen bileşenler formülasyonu ve 3x3 matris determinantı çözümü</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">BİLEŞENLERLE ANALİTİK AÇILIM</div>
+            <p style="font-size:0.92rem;">$\vec{C} = \vec{A} \times \vec{B} = C_x\hat{i} + C_y\hat{j} + C_z\hat{k}$ bileşenleri:</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.05rem; padding:0.5rem 1rem; margin:0.4rem 0;">
+              $$\begin{aligned}
+              C_x &= A_y B_z - A_z B_y \\
+              C_y &= A_z B_x - A_x B_z \\
+              C_z &= A_x B_y - A_y B_x
+              \end{aligned}$$
+            </div>
+            <div class="stamp-note" style="margin-top:0.5rem; padding:0.5rem 0.8rem; font-size:0.85rem;">
+              <strong>Döngü Sırası ($x \to y \to z$):</strong><br>
+              Pozitif terim daima bir sonraki eksenle başlar:<br>
+              $x \implies y \cdot z$, &nbsp; $y \implies z \cdot x$, &nbsp; $z \implies x \cdot y$.
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">3x3 DETERMINANT METODU</div>
+            <p style="font-size:0.92rem;">Vektörel çarpımı hesaplamanın en hatasız pratik yöntemi:</p>
+            <div class="formula-stamp" style="font-size:1rem; padding:0.5rem 0.8rem; margin:0.4rem 0;">
+              $$\vec{A}\times\vec{B} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ A_x & A_y & A_z \\ B_x & B_y & B_z \end{vmatrix}$$
+            </div>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">1. Satıra (Minörlere) Göre Açılım:</p>
+            <div class="formula-stamp lime-bg" style="font-size:0.95rem; padding:0.5rem 0.8rem; margin:0.4rem 0;">
+              $$= \begin{vmatrix} A_y & A_z \\ B_y & B_z \end{vmatrix}\hat{i} - \begin{vmatrix} A_x & A_z \\ B_x & B_z \end{vmatrix}\hat{j} + \begin{vmatrix} A_x & A_y \\ B_x & B_y \end{vmatrix}\hat{k}$$
+            </div>
+            <p style="font-size:0.82rem; margin-top:0.4rem; color:var(--c-lime);"><strong>ÖNEMLİ:</strong> $\hat{j}$ minörünün önündeki EKSİ işaretine dikkat edilmelidir: $-(A_x B_z - A_z B_x) = A_z B_x - A_x B_z$.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 27: Örnek 1 & 2: Vektörel Çarpım ve Diklik Kanıtı -->
+    <div class="slide" data-title="Örnek 1 ve 2: Vektörel Çarpım ve Diklik">
+      <div class="slide-tape">SLAYT ÖRNEKLERİ</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03.6 // ÇÖZÜMLÜ ÖRNEKLER</div>
+          <h2 class="slide-title">ÖRNEK 1 VE 2: VEKTÖREL ÇARPIM VE DİKLİK KANITI</h2>
+          <div class="slide-subtitle">İki farklı yöntemle çarpım çözümü ve skaler çarpımla diklik doğrulaması</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">ÖRNEK 1: VEKTÖREL ÇARPIM</div>
+            <p style="font-size:0.88rem;"><strong>Verilenler:</strong> $\vec{A} = 3\hat{i} - 4\hat{j}, \quad \vec{B} = -2\hat{i} + 3\hat{k}$</p>
+            <p style="font-size:0.84rem; margin-top:0.35rem;"><strong>1. Dağıtarak Çarpma:</strong></p>
+            <div style="font-size:0.82rem; color:#D2D8CF; line-height:1.4;">
+              $\vec{C} = 3\hat{i}\times(3\hat{k}) + (-4\hat{j})\times(-2\hat{i}) + (-4\hat{j})\times(3\hat{k})$<br>
+              $= 9(-\hat{j}) + 8(-\hat{k}) - 12\hat{i}$
+            </div>
+            <p style="font-size:0.84rem; margin-top:0.35rem;"><strong>2. Determinant Yöntemi:</strong></p>
+            <div style="font-size:0.82rem; color:#D2D8CF;">
+              $\vec{C} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ 3 & -4 & 0 \\ -2 & 0 & 3 \end{vmatrix} = (-12-0)\hat{i} - (9-0)\hat{j} + (0-8)\hat{k}$
+            </div>
+            <div class="formula-stamp lime-bg" style="font-size:1.1rem; padding:0.45rem 0.8rem; margin-top:0.4rem;">
+              $$\mathbf{\vec{C} = -12\hat{i} - 9\hat{j} - 8\hat{k}}$$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">ÖRNEK 2: DİKLİK DOĞRULAMASI</div>
+            <p style="font-size:0.85rem;">$\vec{C}$'nin hem $\vec{A}$'ya hem $\vec{B}$'ye dik olduğunu skaler çarpımla gösterelim:</p>
+            <div class="formula-stamp" style="font-size:0.92rem; padding:0.4rem 0.6rem; margin:0.35rem 0;">
+              $$\vec{C}\cdot\vec{A} = (-12)(3) + (-9)(-4) + (-8)(0)$$
+              $$= -36 + 36 + 0 = \mathbf{0} \quad \checkmark \implies \vec{C} \perp \vec{A}$$
+            </div>
+            <div class="formula-stamp" style="font-size:0.92rem; padding:0.4rem 0.6rem; margin:0.35rem 0;">
+              $$\vec{C}\cdot\vec{B} = (-12)(-2) + (-9)(0) + (-8)(3)$$
+              $$= 24 + 0 - 24 = \mathbf{0} \quad \checkmark \implies \vec{C} \perp \vec{B}$$
+            </div>
+            <div class="stamp-note" style="margin-top:0.35rem; padding:0.4rem 0.6rem; font-size:0.82rem;">
+              <strong>Kural:</strong> İki vektörün skaler çarpımı $0$ ise, birbirlerine kesinlikle diktir.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 28: Ders İçi Problem: Hızlanan Asansörde Düşen Vida -->
+    <div class="slide" data-title="Problem: Hızlanan Asansörde Düşen Vida">
+      <div class="slide-tape">TAHTA PROBLEMİ 1</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03 // DERS İÇİ PROBLEMLER</div>
+          <h2 class="slide-title">HIZLANAN ASANSÖRDE SERBEST KALAN VİDA</h2>
+          <div class="slide-subtitle">İvmeli referans sisteminde kinematik, konum eşitleme ve çarpma hızları</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">PROBLEM TANIMI VE HAREKET</div>
+            <p style="font-size:0.88rem;"><strong>Verilenler:</strong> Asansör yukarı doğru $v_{i} = 16\text{ m/s}$ hızla çıkarken $a_{as} = 4\text{ m/s}^2$ ivmeyle hızlanıyor. Tavandan ($h = 3\text{ m}$) bir vida kopuyor.</p>
+            <ul class="poster-list" style="margin-top:0.35rem; font-size:0.84rem; line-height:1.4;">
+              <li>Vida koptuğu anda $v_{0,v} = 16\text{ m/s}\ (\uparrow)$ hızına sahiptir.</li>
+              <li>Vida yerçekimi ivmesiyle uçar: $a_v = -9.8\text{ m/s}^2$.</li>
+            </ul>
+            <p style="font-size:0.85rem; margin-top:0.35rem;"><strong>Konum-Zaman Fonksiyonları ($y=0$ taban):</strong></p>
+            <div class="formula-stamp" style="font-size:0.95rem; padding:0.45rem 0.75rem; margin:0.35rem 0;">
+              $$y_{as}(t) = 16t + 2t^2$$
+              $$y_{vida}(t) = 3 + 16t - 4.9t^2$$
+            </div>
+          </div>
+
+          <div class="card dark">
+            <div class="card-title">ÇARPIŞMA SÜRESİ VE HIZLAR</div>
+            <p style="font-size:0.85rem;">Tabana çarpma şartı: $y_{as} = y_{vida}$</p>
+            <p style="font-size:0.85rem;">$$16t + 2t^2 = 3 + 16t - 4.9t^2 \implies 6.9t^2 = 3$$</p>
+            <div class="formula-stamp lime-bg" style="font-size:1.15rem; padding:0.4rem 0.8rem; margin:0.35rem 0;">
+              $$\mathbf{t \approx 0.659\text{ s}}$$
+            </div>
+            <p style="font-size:0.85rem; margin-top:0.3rem;"><strong>Çarpma Anındaki Hızlar ($v = v_i + at$):</strong></p>
+            <div class="formula-stamp" style="font-size:0.92rem; padding:0.4rem 0.75rem; margin:0.35rem 0;">
+              $$v_{as} = 16 + (4)(0.659) \approx \mathbf{18.64\text{ m/s}\ (\uparrow)}$$
+              $$v_{vida} = 16 - (9.8)(0.659) \approx \mathbf{9.54\text{ m/s}\ (\uparrow)}$$
+            </div>
+            <p style="font-size:0.8rem; color:var(--c-lime); margin-top:0.25rem;">*Yorum: Vida henüz yukarı giderken asansör tabanı daha yüksek ivmeyle alttan yetişmiştir.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 29: Ders İçi Problem: Rüzgârda Uçak & Kepler Boyut Analizi -->
+    <div class="slide" data-title="Problem: Rüzgârda Uçak ve Kepler">
+      <div class="slide-tape">TAHTA PROBLEMİ 2</div>
+      <div class="slide-header">
+        <div>
+          <div class="slide-section-tag">03 // DERS İÇİ PROBLEMLER</div>
+          <h2 class="slide-title">RÜZGÂRDA UÇAK (BAĞIL HIZ) VE KEPLER BOYUT ANALİZİ</h2>
+          <div class="slide-subtitle">2 Boyutta vektörel bağıl hareket bileşenleri ve Kepler 3. Yasası tahta türetimi</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card dark">
+            <div class="card-title">RÜZGÂRDA UÇAK: BAĞIL HIZ</div>
+            <p style="font-size:0.84rem;"><strong>Soru:</strong> Uçak $500\text{ km}$ Kuzeye uçacaktır. $v_{u} = 250\text{ km/h}$. Rüzgâr $v_r = 80\text{ km/h}$, KD ($45^\circ$).</p>
+            <p style="font-size:0.82rem; margin-top:0.3rem;"><strong>1. Doğu-Batı Sürüklenmesini Sıfırlama:</strong></p>
+            <div class="formula-stamp lime-bg" style="font-size:0.92rem; padding:0.4rem 0.7rem; margin:0.3rem 0;">
+              $$250\sin\theta = 80\cos 45^\circ \implies \mathbf{\theta \approx 13.1^\circ\ \text{(Batı)}}$$
+            </div>
+            <p style="font-size:0.82rem; margin-top:0.3rem;"><strong>2. Yere Göre Sürat & Uçuş Süresi:</strong></p>
+            <div class="formula-stamp" style="font-size:0.9rem; padding:0.4rem 0.7rem; margin:0.3rem 0;">
+              $$v_{yer} = 250\cos(13.1^\circ) + 80\sin(45^\circ) \approx \mathbf{300\text{ km/h}}$$
+              $$t = \frac{500\text{ km}}{300\text{ km/h}} \approx \mathbf{1.67\text{ sa (1 sa 40 dk)}}$$
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">KEPLER 3. YASASI BOYUT TÜRETİMİ</div>
+            <p style="font-size:0.84rem;">Periyot $T \propto r^a G^b M^c$ boyut analizi türetimi:</p>
+            <div class="formula-stamp" style="font-size:0.88rem; padding:0.4rem 0.6rem; margin:0.3rem 0;">
+              $$[G] = [L]^3 [M]^{-1} [T]^{-2} \implies [T]^1 = [L]^{a+3b} [M]^{c-b} [T]^{-2b}$$
+            </div>
+            <ul class="poster-list" style="margin-top:0.3rem; font-size:0.82rem; line-height:1.4;">
+              <li>$[T]$ üssü: $-2b = 1 \implies \mathbf{b = -1/2}$</li>
+              <li>$[L]$ üssü: $a + 3b = 0 \implies \mathbf{a = 3/2}$</li>
+              <li>$[M]$ üssü: $c - b = 0 \implies \mathbf{c = -1/2}$</li>
+            </ul>
+            <div class="formula-stamp lime-bg" style="font-size:1.05rem; padding:0.4rem 0.7rem; margin-top:0.3rem;">
+              $$T \propto \frac{r^{3/2}}{\sqrt{GM}} \implies \mathbf{T^2 \propto \frac{r^3}{GM}}$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 30: Büyük Özet Formül Tablosu -->
     <div class="slide" data-title="Büyük Özet Tablosu">
       <div class="slide-tape">BÜYÜK ÖZET</div>
       <div class="slide-header">
@@ -1585,7 +1902,7 @@
         </div>
       </div>
       <div class="slide-body">
-        <table class="poster-table">
+        <table class="poster-table compact">
           <thead>
             <tr>
               <th>Konu / Nicelik</th>
@@ -1644,12 +1961,22 @@
               <td>$\vec{R} = (A_x+B_x)\hat{i} + (A_y+B_y)\hat{j}$</td>
               <td>Bileşenler bazında vektörel toplama</td>
             </tr>
+            <tr>
+              <td><strong>Skaler Çarpım</strong></td>
+              <td>$\vec{A}\cdot\vec{B} = AB\cos\phi = A_x B_x + A_y B_y + A_z B_z$</td>
+              <td>Skaler sonuç, geometrik izdüşüm, diklik şartı ($\vec{A}\cdot\vec{B}=0$)</td>
+            </tr>
+            <tr>
+              <td><strong>Vektörel Çarpım</strong></td>
+              <td>$\vec{C} = \vec{A}\times\vec{B}, \quad C = AB\sin\theta$</td>
+              <td>Düzleme dik yeni vektör, sağ el kuralı, $3\times3$ determinant</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- SLIDE 24: Sınav İpuçları -->
+    <!-- SLIDE 31: Sınav İpuçları -->
     <div class="slide" data-title="Sınav İpuçları">
       <div class="slide-tape">STRATEJİ</div>
       <div class="slide-header">
@@ -1680,20 +2007,20 @@
           </div>
 
           <div class="card dark">
-            <div class="card-title">4. BÖLGE AÇI DÜZELTMESİ</div>
-            <p>$A_x < 0$ olduğunda hesap makinesinin verdiği $\tan^{-1}$ açısına mutlaka $180^\circ$ eklemeyi unutmayın!</p>
+            <div class="card-title">4. BÖLGE VE DİKLİK KONTROLÜ</div>
+            <p>$A_x < 0$ olduğunda açıya $+180^\circ$ ekleyin. İki vektörün dikliğini kanıtlamak için skaler çarpımlarının $\vec{A}\cdot\vec{B} = 0$ olduğunu gösterin!</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 25: Kapanış -->
+    <!-- SLIDE 32: Kapanış -->
     <div class="slide title-slide" data-title="Kapanış">
       <div class="slide-tape">FİNAL</div>
       <h1>BAŞARILAR!</h1>
       <h2>Fizik 1 (FZM 105) Çalışma Kılavuzu Tamamlandı</h2>
       <div class="title-meta-box">
-        <div>Kâğıt Poster Estetiğinde Sunum ve Motion Graphics Paketi</div>
+        <div>Kâğıt Poster Estetiğinde 32 Slaytlık Sunum ve Motion Graphics Paketi</div>
       </div>
     </div>
 
@@ -1704,7 +2031,7 @@
     <div style="display:flex; align-items:center; gap:0.65rem;">
       <button class="nav-btn" id="btn-prev">◀ <span class="btn-text">Önceki</span></button>
       <button class="nav-btn" id="btn-next"><span class="btn-text">Sonraki</span> ▶</button>
-      <span id="slide-counter">01 / 25</span>
+      <span id="slide-counter">01 / 32</span>
     </div>
 
     <div style="display:flex; align-items:center; gap:0.65rem;">
@@ -1773,6 +2100,15 @@
       } catch (e) {}
     }
 
+    // Check initial slide from URL param (?slide=N) or hash (#N)
+    const hashMatch = window.location.hash.match(/^#(\d+)$/);
+    const urlSlide = new URLSearchParams(window.location.search).get('slide');
+    if (urlSlide && !isNaN(parseInt(urlSlide))) {
+      currentIdx = Math.max(0, Math.min(totalSlides - 1, parseInt(urlSlide) - 1));
+    } else if (hashMatch) {
+      currentIdx = Math.max(0, Math.min(totalSlides - 1, parseInt(hashMatch[1]) - 1));
+    }
+
     function updateSlide(playSound = true) {
       slides.forEach((s, i) => {
         s.classList.toggle('active', i === currentIdx);
@@ -1780,6 +2116,9 @@
       counter.textContent = `${String(currentIdx + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
       const pct = (currentIdx / (totalSlides - 1)) * 100;
       progressBar.style.width = `${pct}%`;
+      try {
+        history.replaceState(null, '', '#' + (currentIdx + 1));
+      } catch (e) {}
       if (playSound) playSlideSound();
     }
 
